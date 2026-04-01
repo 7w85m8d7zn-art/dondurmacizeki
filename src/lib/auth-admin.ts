@@ -25,11 +25,20 @@ function getAdminCredentials() {
 }
 
 export function verifyPassword(password: string, storedHash: string) {
-  const [algorithm, saltPart, hashPart] = storedHash.split(":")
-  const salt = saltPart?.trim() ?? ""
-  const hash = hashPart?.replace(/\s+/g, "") ?? ""
+  const normalized = storedHash
+    .trim()
+    .replace(/^['"]+|['"]+$/g, "")
+    .replace(/\s+/g, "")
 
-  if (algorithm !== "scrypt" || !salt || !hash) {
+  const match = normalized.match(/^([a-zA-Z0-9_-]+):([0-9a-fA-F]+):([0-9a-fA-F]+)$/)
+
+  if (!match) {
+    return false
+  }
+
+  const [, algorithm, salt, hash] = match
+
+  if (algorithm.toLowerCase() !== "scrypt" || !salt || !hash) {
     return false
   }
 

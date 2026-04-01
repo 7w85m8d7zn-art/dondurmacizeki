@@ -18,6 +18,9 @@ import type {
 type MenuRow = {
   id: string
   name: string
+  description: string | null
+  isActive: boolean
+  sortOrder: number
 }
 
 type BranchRow = {
@@ -58,6 +61,9 @@ function normalizeName(value: string) {
 function mapMenuOption(menu: {
   id: string
   name: string
+  description: string | null
+  isActive: boolean
+  sortOrder: number
   branchMenus: Array<{
     branch: {
       name: string
@@ -68,6 +74,9 @@ function mapMenuOption(menu: {
     id: menu.id,
     name: menu.name,
     branchName: menu.branchMenus[0]?.branch.name ?? "Sube bulunamadi",
+    description: menu.description ?? "",
+    status: menu.isActive ? "active" : "passive",
+    sortOrder: menu.sortOrder,
   }
 }
 
@@ -133,7 +142,7 @@ async function fetchMenus() {
   const supabase = getSupabaseAdminClient()
   const { data, error } = await supabase
     .from("Menu")
-    .select("id,name")
+    .select("id,name,description,isActive,sortOrder")
     .order("sortOrder", { ascending: true })
 
   throwIfSupabaseError(error, "Menu listesi alinamadi")
@@ -225,18 +234,6 @@ async function fetchProducts(categoryIds?: string[]) {
   return (data ?? []) as ProductRow[]
 }
 
-async function getCategoryOptions(): Promise<CategoryOption[]> {
-  const [categories, menus] = await Promise.all([fetchCategories(), fetchMenus()])
-  const menuById = new Map(menus.map((menu) => [menu.id, menu]))
-
-  return categories.map((category) => ({
-    id: category.id,
-    name: category.name,
-    menuId: category.menuId,
-    menuName: menuById.get(category.menuId)?.name ?? "Menu bulunamadi",
-  }))
-}
-
 export async function getCatalogManagementData(): Promise<CatalogManagementData> {
   const [menus, branchMenus, categories, products] = await Promise.all([
     fetchMenus(),
@@ -245,10 +242,7 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
     fetchProducts(),
   ])
 
-  const [branches, categoryOptions] = await Promise.all([
-    fetchBranches([...new Set(branchMenus.map((item) => item.branchId))]),
-    getCategoryOptions(),
-  ])
+  const branches = await fetchBranches([...new Set(branchMenus.map((item) => item.branchId))])
 
   const branchById = new Map(branches.map((branch) => [branch.id, branch]))
   const menuById = new Map(menus.map((menu) => [menu.id, menu]))
@@ -263,6 +257,13 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
     )
   }
 
+  const categoryOptions: CategoryOption[] = categories.map((category) => ({
+    id: category.id,
+    name: category.name,
+    menuId: category.menuId,
+    menuName: menuById.get(category.menuId)?.name ?? "Menu bulunamadi",
+  }))
+
   return {
     menus: menus.map((menu) => {
       const branchRelation = branchMenus
@@ -270,8 +271,7 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
         .sort((first, second) => first.sortOrder - second.sortOrder)[0]
 
       return mapMenuOption({
-        id: menu.id,
-        name: menu.name,
+        ...menu,
         branchMenus: [
           {
             branch: {

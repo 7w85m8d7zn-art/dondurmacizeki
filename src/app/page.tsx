@@ -194,5 +194,3 @@ function TikTokIcon({ className }: { className?: string }) {
     </svg>
   )
 }
-
-export const dynamic = "force-dynamic"

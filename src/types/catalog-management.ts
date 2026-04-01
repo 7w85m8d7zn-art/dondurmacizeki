@@ -4,6 +4,9 @@ export interface MenuOption {
   id: string
   name: string
   branchName: string
+  description?: string
+  status?: EntityStatus
+  sortOrder?: number
 }
 
 export interface CategoryOption {

@@ -25,7 +25,9 @@ function getAdminCredentials() {
 }
 
 export function verifyPassword(password: string, storedHash: string) {
-  const [algorithm, salt, hash] = storedHash.split(":")
+  const [algorithm, saltPart, hashPart] = storedHash.split(":")
+  const salt = saltPart?.trim() ?? ""
+  const hash = hashPart?.replace(/\s+/g, "") ?? ""
 
   if (algorithm !== "scrypt" || !salt || !hash) {
     return false

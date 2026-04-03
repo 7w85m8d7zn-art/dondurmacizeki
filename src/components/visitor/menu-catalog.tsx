@@ -143,61 +143,74 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
           {filteredItems.map((item) => (
             <article
               key={item.id}
-              className="group grid grid-cols-[112px_minmax(0,1fr)] items-start gap-3 rounded-[1.45rem] border border-stone-200/70 bg-[linear-gradient(135deg,rgba(250,250,249,0.96),rgba(255,255,255,0.98))] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-200 hover:bg-white hover:shadow-[0_16px_34px_rgba(120,53,15,0.08)] sm:grid-cols-[118px_minmax(0,1fr)_132px] sm:items-center sm:gap-4 sm:rounded-[1.6rem] sm:p-3.5"
+              className="group overflow-hidden rounded-[1.45rem] border border-stone-200/70 bg-[linear-gradient(135deg,rgba(250,250,249,0.96),rgba(255,255,255,0.98))] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-200 hover:bg-white hover:shadow-[0_16px_34px_rgba(120,53,15,0.08)] sm:rounded-[1.6rem] sm:p-3.5"
             >
-              <div className="relative size-[112px] overflow-hidden rounded-[1.15rem] bg-stone-100 sm:size-[118px] sm:rounded-[1.3rem]">
+              <div className="relative h-[176px] w-full overflow-hidden rounded-[1.15rem] bg-stone-100 sm:hidden">
                 <AppImage
                   src={item.imageUrl}
                   alt={item.name}
                   fill
-                  sizes="(max-width: 640px) 112px, 118px"
-                  className="object-cover transition duration-500 group-hover:scale-[1.06]"
+                  sizes="(max-width: 640px) 100vw, 720px"
+                  className="object-cover transition duration-500 group-hover:scale-[1.04]"
                 />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.16))]" />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.18))]" />
               </div>
 
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-800">
-                    {item.menuName}
-                  </span>
-                  <span className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-700">
-                    {item.categoryName}
-                  </span>
-                  {item.badges?.map((badge) => (
-                    <span
-                      key={badge}
-                      className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-600"
-                    >
-                      {badge}
+              <div className="mt-3 grid gap-3 sm:mt-0 sm:grid-cols-[118px_minmax(0,1fr)_132px] sm:items-center sm:gap-4">
+                <div className="relative hidden h-[118px] w-[118px] shrink-0 overflow-hidden rounded-[1.3rem] bg-stone-100 sm:block">
+                  <AppImage
+                    src={item.imageUrl}
+                    alt={item.name}
+                    fill
+                    sizes="118px"
+                    className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.16))]" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-800">
+                      {item.menuName}
                     </span>
-                  ))}
+                    <span className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-700">
+                      {item.categoryName}
+                    </span>
+                    {item.badges?.map((badge) => (
+                      <span
+                        key={badge}
+                        className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-600"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className="mt-2.5 truncate text-base font-black tracking-tight text-stone-950 sm:text-[1.35rem]">
+                    {item.name}
+                  </p>
+                  <p className="mt-1.5 line-clamp-2 max-w-2xl text-sm leading-6 text-stone-600">
+                    {item.description}
+                  </p>
+
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2 text-[11px] font-medium text-stone-500 sm:mt-3">
+                    <span className="rounded-full bg-stone-100 px-2.5 py-1">
+                      Günlük hazır servis
+                    </span>
+                    <span className="rounded-full bg-stone-100 px-2.5 py-1">
+                      Taze sunum
+                    </span>
+                  </div>
                 </div>
 
-                <p className="mt-2.5 truncate text-base font-black tracking-tight text-stone-950 sm:mt-3 sm:text-[1.35rem]">
-                  {item.name}
-                </p>
-                <p className="mt-1.5 line-clamp-2 max-w-2xl text-sm leading-6 text-stone-600">
-                  {item.description}
-                </p>
-
-                <div className="mt-2.5 flex flex-wrap items-center gap-2 text-[11px] font-medium text-stone-500 sm:mt-3">
-                  <span className="rounded-full bg-stone-100 px-2.5 py-1">
-                    Günlük hazır servis
-                  </span>
-                  <span className="rounded-full bg-stone-100 px-2.5 py-1">
-                    Taze sunum
+                <div className="flex items-center justify-between gap-3 rounded-[1rem] border border-amber-100 bg-[linear-gradient(180deg,#fffdfa,#fff6ea)] px-3.5 py-2.5 shadow-[0_10px_24px_rgba(120,53,15,0.06)] sm:min-w-[116px] sm:flex-col sm:items-end sm:justify-center sm:self-stretch sm:rounded-[1.2rem] sm:px-5 sm:py-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-stone-400">
+                    Fiyat
+                  </p>
+                  <span className="block text-lg font-black tracking-tight text-stone-950 sm:text-[2rem]">
+                    {formatPrice(item.price)}
                   </span>
                 </div>
-              </div>
-
-              <div className="col-span-2 flex items-center justify-between gap-3 rounded-[1rem] border border-amber-100 bg-[linear-gradient(180deg,#fffdfa,#fff6ea)] px-3.5 py-2.5 shadow-[0_10px_24px_rgba(120,53,15,0.06)] sm:col-span-1 sm:min-w-[116px] sm:flex-col sm:items-end sm:justify-center sm:self-stretch sm:rounded-[1.2rem] sm:px-5 sm:py-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-stone-400">
-                  Fiyat
-                </p>
-                <span className="block text-lg font-black tracking-tight text-stone-950 sm:text-[2rem]">
-                  {formatPrice(item.price)}
-                </span>
               </div>
             </article>
           ))}

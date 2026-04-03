@@ -145,12 +145,12 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
               key={item.id}
               className="group grid gap-3 rounded-[1.45rem] border border-stone-200/70 bg-[linear-gradient(135deg,rgba(250,250,249,0.96),rgba(255,255,255,0.98))] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-200 hover:bg-white hover:shadow-[0_16px_34px_rgba(120,53,15,0.08)] sm:gap-4 sm:rounded-[1.6rem] sm:p-3.5 sm:grid-cols-[118px_minmax(0,1fr)_132px] sm:items-center"
             >
-              <div className="relative h-[92px] overflow-hidden rounded-[1.15rem] bg-stone-100 sm:h-[118px] sm:w-[118px] sm:rounded-[1.3rem]">
+              <div className="relative size-[92px] overflow-hidden rounded-[1.15rem] bg-stone-100 sm:size-[118px] sm:rounded-[1.3rem]">
                 <AppImage
                   src={item.imageUrl}
                   alt={item.name}
                   fill
-                  sizes="(max-width: 640px) 100vw, 118px"
+                  sizes="(max-width: 640px) 92px, 118px"
                   className="object-cover transition duration-500 group-hover:scale-[1.06]"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.16))]" />

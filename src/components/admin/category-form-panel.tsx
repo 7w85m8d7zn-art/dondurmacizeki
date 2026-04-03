@@ -93,8 +93,8 @@ export function CategoryFormPanel({
             <Field label="İsim / Başlık" error={form.formState.errors.name?.message}>
               <input
                 {...form.register("name")}
-                className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm font-semibold uppercase text-stone-950 outline-none transition focus:border-stone-400"
-                placeholder="COMBO MENULER"
+                className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm font-semibold text-stone-950 outline-none transition focus:border-stone-400"
+                placeholder="Kategori adını girin, örn: 'Tatlılar'"
               />
             </Field>
 

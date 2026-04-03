@@ -139,8 +139,8 @@ export function MenuFormPanel({
               <span className="text-sm font-semibold text-[#8fa1ba]">İsim / Başlık</span>
               <input
                 {...form.register("name")}
-                className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm font-semibold uppercase text-stone-950 outline-none transition focus:border-stone-400"
-                placeholder="KARAKÖPRÜ MENÜSÜ"
+                className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm font-semibold text-stone-950 outline-none transition focus:border-stone-400"
+                placeholder="Karaköprü Menüsü"
               />
               <FieldError message={form.formState.errors.name?.message} />
             </label>

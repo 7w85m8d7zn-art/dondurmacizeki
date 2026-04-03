@@ -23,7 +23,7 @@ export async function getBranchDetail(branchId: string) {
   const branch = await getBranchById(branchId)
 
   if (!branch) {
-    throw notFound("Sube bulunamadi.")
+    throw notFound("Şube bulunamadı.")
   }
 
   return {
@@ -34,7 +34,7 @@ export async function getBranchDetail(branchId: string) {
 
 export async function createBranchRecord(values: BranchFormValues) {
   if (await isBranchSlugTaken(values.slug)) {
-    throw conflict("Bu sube slug'i zaten kullanimda.")
+    throw conflict("Bu şube slug'i zaten kullanımda.")
   }
 
   const branch = await createBranch(values)
@@ -54,17 +54,17 @@ export async function createBranchRecord(values: BranchFormValues) {
 
 export async function updateBranchRecord(branchId: string, values: BranchFormValues) {
   if (!(await getBranchById(branchId))) {
-    throw notFound("Sube bulunamadi.")
+    throw notFound("Şube bulunamadı.")
   }
 
   if (await isBranchSlugTaken(values.slug, branchId)) {
-    throw conflict("Bu sube slug'i zaten kullanimda.")
+    throw conflict("Bu şube slug'i zaten kullanımda.")
   }
 
   const branch = await updateBranch(branchId, values)
 
   if (!branch) {
-    throw notFound("Sube bulunamadi.")
+    throw notFound("Şube bulunamadı.")
   }
 
   await upsertHomeBranchCard({
@@ -84,7 +84,7 @@ export async function deleteBranchCascade(branchId: string) {
   const branch = await getBranchById(branchId)
 
   if (!branch) {
-    throw notFound("Sube bulunamadi.")
+    throw notFound("Şube bulunamadı.")
   }
 
   for (const menu of await getMenusByBranchId(branchId)) {
@@ -97,7 +97,7 @@ export async function deleteBranchCascade(branchId: string) {
   const deleted = await deleteBranch(branchId)
 
   if (!deleted) {
-    throw badRequest("Sube silinemedi.")
+    throw badRequest("Şube silinemedi.")
   }
 
   return { id: branchId }
@@ -107,7 +107,7 @@ export async function toggleBranchRecord(branchId: string) {
   const branch = await toggleBranchStatus(branchId)
 
   if (!branch) {
-    throw notFound("Sube bulunamadi.")
+    throw notFound("Şube bulunamadı.")
   }
 
   return {

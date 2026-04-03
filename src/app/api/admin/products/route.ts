@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const parsed = productFormSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Urun formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Ürün formu geçersiz.", parsed.error.flatten())
     }
 
     const created = await createProductRecord(parsed.data)
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     return successResponse(created, {
       status: 201,
-      message: "Urun olusturuldu.",
+      message: "Ürün oluşturuldu.",
     })
   })
 }

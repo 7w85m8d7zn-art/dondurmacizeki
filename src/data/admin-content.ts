@@ -29,7 +29,7 @@ export const adminNavigation: AdminNavItem[] = [
 
 export const adminDashboardData: AdminDashboardData = {
   brandName: "Dondurmacı Zeki",
-  adminName: "Zeki Yönetim",
+  adminName: "Dondurmacı Zeki Yönetim",
   stats: [
     {
       id: "daily-views",

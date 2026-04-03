@@ -6,7 +6,7 @@ import { AdminShell } from "@/components/admin/admin-shell"
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   "/admin": {
-    title: "Dashboard",
+    title: "Gösterge Paneli",
     description:
       "Günlük performansı, QR hareketlerini ve operasyon akışını tek ekranda takip et.",
   },

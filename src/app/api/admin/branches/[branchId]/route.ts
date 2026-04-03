@@ -26,11 +26,11 @@ export async function PATCH(request: Request, context: BranchRouteContext) {
     const parsed = branchFormSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Sube formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Şube formu geçersiz.", parsed.error.flatten())
     }
 
     return successResponse(await updateBranchRecord(branchId, parsed.data), {
-      message: "Sube guncellendi.",
+      message: "Şube güncellendi.",
     })
   })
 }
@@ -39,7 +39,7 @@ export async function DELETE(_: Request, context: BranchRouteContext) {
   return handleApiRequest(async () => {
     const { branchId } = await context.params
     return successResponse(await deleteBranchCascade(branchId), {
-      message: "Sube ve bagli veriler silindi.",
+      message: "Şube ve bağlı veriler silindi.",
     })
   })
 }

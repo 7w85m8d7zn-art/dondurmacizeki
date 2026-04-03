@@ -15,12 +15,12 @@ export async function POST(request: Request) {
     const parsed = qrDesignSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("QR tasarim formu gecersiz.", parsed.error.flatten())
+      throw badRequest("QR tasarım formu geçersiz.", parsed.error.flatten())
     }
 
     return successResponse(await createQrDesignRecord(parsed.data), {
       status: 201,
-      message: "QR tasarimi olusturuldu.",
+      message: "QR tasarımı oluşturuldu.",
     })
   })
 }

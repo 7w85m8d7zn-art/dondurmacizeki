@@ -23,15 +23,15 @@ export function MenuTable({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-xl font-semibold tracking-tight text-stone-950">
-            Menu Listesi
+            Menü Listesi
           </h3>
           <p className="mt-2 text-sm leading-6 text-stone-500">
-            Tum menuleri listele, subeye ata, detaylarini duzenle veya durumu
-            degistir.
+            Tüm menüleri listele, şubeye ata, detaylarını düzenle veya durumu
+            değiştir.
           </p>
         </div>
         <span className="rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700">
-          {menus.length} menu
+          {menus.length} menü
         </span>
       </div>
 
@@ -57,21 +57,21 @@ export function MenuTable({
                   {menu.categoryCount} kategori
                 </span>
                 <span className="rounded-full bg-stone-100 px-3 py-1">
-                  Sira {menu.sortOrder}
+                  Sıra {menu.sortOrder}
                 </span>
               </div>
             </div>
 
             <div className="text-sm text-stone-700">
               <p className="text-xs uppercase tracking-[0.18em] text-stone-400">
-                Sube
+                Şube
               </p>
               <p className="mt-2 font-medium">{menu.branchName}</p>
             </div>
 
             <div className="text-sm text-stone-700">
               <p className="text-xs uppercase tracking-[0.18em] text-stone-400">
-                Guncelleme
+                Güncelleme
               </p>
               <p className="mt-2 font-medium">
                 {new Intl.DateTimeFormat("tr-TR", {
@@ -104,7 +104,7 @@ export function MenuTable({
                 onClick={() => onEdit(menu.id)}
                 className="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-stone-800"
               >
-                Duzenle
+                Düzenle
               </button>
               <button
                 type="button"

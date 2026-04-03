@@ -20,7 +20,7 @@ export async function PATCH(request: Request, context: CategoryRouteContext) {
     const parsed = categoryFormSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Kategori formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Kategori formu geçersiz.", parsed.error.flatten())
     }
 
     const updated = await updateCategoryRecord(categoryId, parsed.data)
@@ -28,7 +28,7 @@ export async function PATCH(request: Request, context: CategoryRouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(updated, {
-      message: "Kategori guncellendi.",
+      message: "Kategori güncellendi.",
     })
   })
 }
@@ -41,7 +41,7 @@ export async function DELETE(_: Request, context: CategoryRouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(deleted, {
-      message: "Kategori ve bagli urunler silindi.",
+      message: "Kategori ve bağlı ürünler silindi.",
     })
   })
 }

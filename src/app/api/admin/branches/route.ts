@@ -15,12 +15,12 @@ export async function POST(request: Request) {
     const parsed = branchFormSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Sube formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Şube formu geçersiz.", parsed.error.flatten())
     }
 
     return successResponse(await createBranchRecord(parsed.data), {
       status: 201,
-      message: "Sube olusturuldu.",
+      message: "Şube oluşturuldu.",
     })
   })
 }

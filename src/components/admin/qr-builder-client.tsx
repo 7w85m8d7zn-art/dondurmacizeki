@@ -186,7 +186,7 @@ export function QrBuilderClient() {
           </div>
           <div>
             <p className="text-[11px] font-black uppercase tracking-[0.24em] text-stone-900">
-              Tasarim Editoru
+              Tasarım Editörü
             </p>
             <p className="text-xs text-stone-500">
               Mobil odaklı QR kartını daha rahat bir akışla şekillendirin.

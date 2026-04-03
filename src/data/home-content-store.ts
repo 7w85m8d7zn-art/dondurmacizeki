@@ -164,7 +164,7 @@ async function getSiteSettingRecord() {
     .limit(1)
     .maybeSingle()
 
-  throwIfSupabaseError(error, "Site ayarlari alinamadi")
+  throwIfSupabaseError(error, "Site ayarları alınamadı")
 
   return (data ?? null) as SiteSettingRow | null
 }
@@ -177,7 +177,7 @@ async function getBranchRecordsWithMenus(): Promise<BranchRecordWithMenu[]> {
     .select("id,slug,name,shortAddress,fullAddress,mapUrl,phone,serviceNote,sortOrder")
     .order("sortOrder", { ascending: true })
 
-  throwIfSupabaseError(branchError, "Sube listesi alinamadi")
+  throwIfSupabaseError(branchError, "Şube listesi alınamadı")
 
   const branchRows = (branches ?? []) as BranchRow[]
   const branchIds = branchRows.map((branch) => branch.id)
@@ -199,8 +199,8 @@ async function getBranchRecordsWithMenus(): Promise<BranchRecordWithMenu[]> {
       : Promise.resolve({ data: [], error: null }),
   ])
 
-  throwIfSupabaseError(homeCardsResult.error, "Ana sayfa kartlari alinamadi")
-  throwIfSupabaseError(branchMenusResult.error, "Sube-menu iliskileri alinamadi")
+  throwIfSupabaseError(homeCardsResult.error, "Ana sayfa kartları alınamadı")
+  throwIfSupabaseError(branchMenusResult.error, "Şube-menü ilişkileri alınamadı")
 
   const homeCards = (homeCardsResult.data ?? []) as HomeCardRow[]
   const branchMenus = (branchMenusResult.data ?? []) as BranchMenuRow[]
@@ -215,7 +215,7 @@ async function getBranchRecordsWithMenus(): Promise<BranchRecordWithMenu[]> {
         .eq("isActive", true)
     : { data: [], error: null }
 
-  throwIfSupabaseError(menuError, "Menu listesi alinamadi")
+  throwIfSupabaseError(menuError, "Menü listesi alınamadı")
 
   const activeMenus = (menus ?? []) as MenuRow[]
   const activeMenuIds = new Set(activeMenus.map((menu) => menu.id))
@@ -238,7 +238,7 @@ async function getBranchRecordsWithMenus(): Promise<BranchRecordWithMenu[]> {
       : Promise.resolve({ data: [], error: null }),
   ])
 
-  throwIfSupabaseError(categoriesResult.error, "Kategori listesi alinamadi")
+  throwIfSupabaseError(categoriesResult.error, "Kategori listesi alınamadı")
 
   const categories = (categoriesResult.data ?? []) as CategoryRow[]
   const categoryIds = categories.map((category) => category.id)
@@ -252,7 +252,7 @@ async function getBranchRecordsWithMenus(): Promise<BranchRecordWithMenu[]> {
         .order("sortOrder", { ascending: true })
     : { data: [], error: null }
 
-  throwIfSupabaseError(productError, "Urun listesi alinamadi")
+  throwIfSupabaseError(productError, "Ürün listesi alınamadı")
 
   const productRows = (products ?? []) as ProductRow[]
 
@@ -374,8 +374,8 @@ export async function getHomeContentConfig(): Promise<HomeContentConfig> {
       getSupabaseAdminClient().from("HomeBranchCard").select("branchId,title,shortAddress,mapUrl"),
     ])
 
-    throwIfSupabaseError(branches.error, "Sube listesi alinamadi")
-    throwIfSupabaseError(homeCards.error, "Ana sayfa kartlari alinamadi")
+    throwIfSupabaseError(branches.error, "Şube listesi alınamadı")
+    throwIfSupabaseError(homeCards.error, "Ana sayfa kartları alınamadı")
 
     const branchRows =
       ((branches.data ?? []) as Array<{
@@ -400,7 +400,7 @@ export async function getHomeContentConfig(): Promise<HomeContentConfig> {
       slogan: siteSetting?.slogan ?? "",
       logoUrl: siteSetting?.logoUrl ?? "",
       backgroundImageUrl: siteSetting?.backgroundImageUrl ?? "",
-      menuButtonText: siteSetting?.menuButtonText ?? "Menuyu Goruntule",
+      menuButtonText: siteSetting?.menuButtonText ?? "Menüyü Görüntüle",
       branchCards: branchRows.map((branch) => ({
         branchId: branch.id,
         title: cardByBranchId.get(branch.id)?.title ?? branch.name,
@@ -471,7 +471,7 @@ export async function updateHomeContentConfig(values: HomeContentConfig) {
       })
       .eq("id", existing.id)
 
-    throwIfSupabaseError(error, "Site ayarlari guncellenemedi")
+    throwIfSupabaseError(error, "Site ayarları güncellenemedi")
   } else {
     const { error } = await supabase.from("SiteSetting").insert({
       siteName: values.siteTitle,
@@ -486,7 +486,7 @@ export async function updateHomeContentConfig(values: HomeContentConfig) {
       whatsappUrl: values.socialLinks.whatsapp,
     })
 
-    throwIfSupabaseError(error, "Site ayarlari kaydedilemedi")
+    throwIfSupabaseError(error, "Site ayarları kaydedilemedi")
   }
 
   await Promise.all(values.branchCards.map((card) => upsertHomeBranchCard(card)))

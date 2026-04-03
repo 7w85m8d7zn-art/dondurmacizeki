@@ -29,7 +29,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     if (!parsed.success) {
       throw badRequest(
-        parsed.error.issues[0]?.message ?? "Form verileri gecersiz.",
+        parsed.error.issues[0]?.message ?? "Form verileri geçersiz.",
         parsed.error.flatten(),
       )
     }
@@ -39,7 +39,7 @@ export async function PATCH(request: Request, context: RouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(updated, {
-      message: "Menu guncellendi.",
+      message: "Menü güncellendi.",
     })
   })
 }
@@ -52,7 +52,7 @@ export async function DELETE(_: Request, context: RouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(deleted, {
-      message: "Menu ve bagli veriler silindi.",
+      message: "Menü ve bağlı veriler silindi.",
     })
   })
 }

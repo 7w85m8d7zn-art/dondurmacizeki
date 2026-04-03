@@ -41,15 +41,15 @@ export function DashboardTrafficCard({
       <div className="flex flex-col gap-3 border-b border-stone-100 pb-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">
-            Canli Site Dagilimi
+            Canlı Site Dağılımı
           </p>
           <h3 className="mt-2 text-xl font-semibold tracking-tight text-stone-950 sm:text-2xl">
-            Konum, menu ve katalog ozeti
+            Konum, menü ve katalog özeti
           </h3>
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded-full border border-stone-200 px-3 py-1.5 text-xs font-semibold text-stone-600">
-            Anlik
+            Anlık
           </span>
           <span className="rounded-full bg-stone-950 px-3 py-1.5 text-xs font-semibold text-white">
             Site verisi
@@ -112,7 +112,7 @@ export function DashboardTrafficCard({
             <p className="text-sm font-semibold text-stone-950">{branch.branchName}</p>
             <div className="mt-2 flex items-center justify-between gap-3 text-sm text-stone-500">
               <span>{branch.visits} kategori</span>
-              <span>{branch.scans} urun</span>
+              <span>{branch.scans} ürün</span>
             </div>
           </div>
         ))}

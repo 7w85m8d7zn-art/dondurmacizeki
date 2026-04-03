@@ -17,7 +17,7 @@ export async function POST(_: Request, context: ToggleRouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(updated, {
-      message: "Menu durumu guncellendi.",
+      message: "Menü durumu güncellendi.",
     })
   })
 }

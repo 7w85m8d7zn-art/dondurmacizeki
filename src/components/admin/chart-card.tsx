@@ -10,10 +10,10 @@ export function ChartCard({ items }: ChartCardProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">
-            Sube Trafik Akisi
+            Şube Trafik Akışı
           </p>
           <h3 className="mt-2 text-xl font-semibold tracking-tight text-stone-950 sm:text-2xl">
-            Subelere gore trafik dagilimi
+            Şubelere göre trafik dağılımı
           </h3>
         </div>
         <span className="w-fit rounded-full bg-stone-950 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
@@ -28,7 +28,7 @@ export function ChartCard({ items }: ChartCardProps) {
               <div className="min-w-0">
                 <p className="font-medium text-stone-900">{item.branchName}</p>
                 <p className="text-sm text-stone-500">
-                  {item.visits} goruntulenme • {item.scans} tarama
+                  {item.visits} görüntülenme • {item.scans} tarama
                 </p>
               </div>
               <p className="shrink-0 text-sm font-semibold text-stone-700">

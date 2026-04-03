@@ -26,11 +26,11 @@ export async function PATCH(request: Request, context: QrDesignRouteContext) {
     const parsed = qrDesignSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("QR tasarim formu gecersiz.", parsed.error.flatten())
+      throw badRequest("QR tasarım formu geçersiz.", parsed.error.flatten())
     }
 
     return successResponse(await updateQrDesignRecord(designId, parsed.data), {
-      message: "QR tasarimi guncellendi.",
+      message: "QR tasarımı güncellendi.",
     })
   })
 }
@@ -39,7 +39,7 @@ export async function DELETE(_: Request, context: QrDesignRouteContext) {
   return handleApiRequest(async () => {
     const { designId } = await context.params
     return successResponse(await deleteQrDesignRecord(designId), {
-      message: "QR tasarimi silindi.",
+      message: "QR tasarımı silindi.",
     })
   })
 }

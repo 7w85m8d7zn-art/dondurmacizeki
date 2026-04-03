@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       throw badRequest(
-        parsed.error.issues[0]?.message ?? "Form verileri gecersiz.",
+        parsed.error.issues[0]?.message ?? "Form verileri geçersiz.",
         parsed.error.flatten(),
       )
     }
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     return successResponse(created, {
       status: 201,
-      message: "Menu olusturuldu.",
+      message: "Menü oluşturuldu.",
     })
   })
 }

@@ -13,11 +13,11 @@ export async function POST(request: Request) {
     const parsed = reorderSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Siralama verisi gecersiz.", parsed.error.flatten())
+      throw badRequest("Sıralama verisi geçersiz.", parsed.error.flatten())
     }
 
     return successResponse(await reorderCategoryRecords(parsed.data.orderedIds), {
-      message: "Kategori siralamasi guncellendi.",
+      message: "Kategori sıralaması güncellendi.",
     })
   })
 }

@@ -11,7 +11,6 @@ import {
 } from "lucide-react"
 import { useEffect, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/navigation"
 
 import { AdminFeedback } from "@/components/admin/admin-feedback"
 import { AppImage } from "@/components/ui/app-image"
@@ -27,7 +26,6 @@ interface HomeContentManagementClientProps {
 export function HomeContentManagementClient({
   initialData,
 }: HomeContentManagementClientProps) {
-  const router = useRouter()
   const [feedback, setFeedback] = useState<{
     message: string
     tone: "success" | "error"
@@ -72,7 +70,7 @@ export function HomeContentManagementClient({
 
     if (!response.ok) {
       setFeedback({
-        message: payload.message ?? "Ana sayfa icerigi guncellenemedi.",
+        message: payload.message ?? "Ana sayfa içeriği güncellenemedi.",
         tone: "error",
       })
       return
@@ -82,10 +80,9 @@ export function HomeContentManagementClient({
     window.localStorage.setItem("home-content-updated-at", Date.now().toString())
 
     setFeedback({
-      message: "Ana sayfa icerigi basariyla kaydedildi.",
+      message: "Ana sayfa içeriği başarıyla kaydedildi.",
       tone: "success",
     })
-    router.refresh()
   }
 
   return (
@@ -93,11 +90,11 @@ export function HomeContentManagementClient({
       <section className="flex flex-col gap-3 border-b border-stone-200 pb-5 xl:flex-row xl:items-center xl:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">
-            Uygulama Ayarlari
+            Uygulama Ayarları
           </p>
           <p className="mt-3 text-sm text-stone-500">
-            Marka gorsellerini, iletisim alanlarini ve uygulama deneyimini
-            ozellestirin.
+            Marka görsellerini, iletişim alanlarını ve uygulama deneyimini
+            özelleştirin.
           </p>
         </div>
 
@@ -109,7 +106,7 @@ export function HomeContentManagementClient({
           disabled={isPending}
         >
           <Save className="size-4" />
-          {isPending ? "Ayarlar Kaydediliyor..." : "Ayarlari Yayimla"}
+          {isPending ? "Ayarlar Kaydediliyor..." : "Ayarları Yayımla"}
         </Button>
       </section>
 
@@ -128,11 +125,11 @@ export function HomeContentManagementClient({
           <SettingsCard
             icon="T"
             title="Temel Marka Bilgileri"
-            description="Ust alanda gosterilecek ana metinler ve buton ifadesi."
+            description="Üst alanda gösterilecek ana metinler ve buton ifadesi."
           >
             <div className="grid gap-4">
               <Field
-                label="Restoran Ismi"
+                label="Restoran İsmi"
                 error={form.formState.errors.siteTitle?.message}
               >
                 <input
@@ -142,7 +139,7 @@ export function HomeContentManagementClient({
               </Field>
 
               <Field
-                label="Marka Slogani"
+                label="Marka Sloganı"
                 error={form.formState.errors.slogan?.message}
               >
                 <input {...form.register("slogan")} className={inputClassName} />
@@ -173,8 +170,8 @@ export function HomeContentManagementClient({
 
           <SettingsCard
             icon="G"
-            title="Gorsel Materyaller"
-            description="Telefon simulasyonunda aninda guncellenen marka gorselleri."
+            title="Görsel Materyaller"
+            description="Telefon simülasyonunda anında güncellenen marka görselleri."
           >
             <div className="grid gap-4 lg:grid-cols-2">
               <MediaField
@@ -194,7 +191,7 @@ export function HomeContentManagementClient({
               </MediaField>
 
               <MediaField
-                title="Kapak Fotografi"
+                title="Kapak Fotoğrafı"
                 preview={backgroundPreview}
                 onPick={(value) => {
                   setBackgroundUploadPreview(value)
@@ -216,8 +213,8 @@ export function HomeContentManagementClient({
 
           <SettingsCard
             icon="I"
-            title="Iletisim & Sosyal Medya"
-            description="Baglanti alanlarindaki degisiklikler telefon simulasyonuna aninda yansir."
+            title="İletişim & Sosyal Medya"
+            description="Bağlantı alanlarındaki değişiklikler telefon simülasyonuna anında yansır."
           >
             <div className="grid gap-4 lg:grid-cols-2">
               <Field
@@ -261,7 +258,7 @@ export function HomeContentManagementClient({
               </Field>
 
               <Field
-                label="Kisa Web Adresi"
+                label="Kısa Web Adresi"
                 error={form.formState.errors.socialLinks?.tiktok?.message}
               >
                 <input
@@ -277,7 +274,7 @@ export function HomeContentManagementClient({
         <aside className="xl:sticky xl:top-24 xl:self-start">
           <div className="px-2">
             <p className="text-center text-[10px] font-semibold uppercase tracking-[0.28em] text-stone-400">
-              Telefon Simulasyonu
+              Telefon Simülasyonu
             </p>
           </div>
 
@@ -329,7 +326,7 @@ export function HomeContentManagementClient({
                     type="button"
                     className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-[#ef1c24] px-5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(239,28,36,0.28)]"
                   >
-                    {watchedValues.menuButtonText || "MENUYU INCELE"}
+                    {watchedValues.menuButtonText || "MENÜYÜ İNCELE"}
                   </button>
 
                   <div className="mt-auto w-full border-t border-white/10 pt-4">
@@ -489,11 +486,11 @@ function fileToDataUrl(file: File) {
         return
       }
 
-      reject(new Error("Gorsel verisi okunamadi."))
+      reject(new Error("Görsel verisi okunamadı."))
     }
 
     reader.onerror = () => {
-      reject(new Error("Gorsel verisi okunamadi."))
+      reject(new Error("Görsel verisi okunamadı."))
     }
 
     reader.readAsDataURL(file)

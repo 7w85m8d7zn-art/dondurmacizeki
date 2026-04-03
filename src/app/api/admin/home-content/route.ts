@@ -16,7 +16,7 @@ export async function PATCH(request: Request) {
     const parsed = homeContentSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Ana sayfa formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Ana sayfa formu geçersiz.", parsed.error.flatten())
     }
 
     const updatedRecord = await updateHomeContentRecord(parsed.data)
@@ -25,7 +25,7 @@ export async function PATCH(request: Request) {
     revalidatePath("/admin/anasayfa-icerik")
 
     return successResponse(updatedRecord, {
-      message: "Ana sayfa icerigi guncellendi.",
+      message: "Ana sayfa içeriği güncellendi.",
     })
   })
 }

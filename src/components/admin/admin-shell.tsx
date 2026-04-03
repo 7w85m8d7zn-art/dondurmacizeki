@@ -28,7 +28,7 @@ export function AdminShell({
                 Dondurmacı Zeki
               </p>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400">
-                Admin Control
+                Admin Kontrol
               </p>
             </div>
           </div>
@@ -77,7 +77,7 @@ export function AdminShell({
               <div className="min-w-0 space-y-2">
                 <div className="flex items-center gap-2 lg:hidden">
                   <span className="rounded-full bg-[#ef1c24] px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white">
-                    Admin Control
+                    Admin Kontrol
                   </span>
                   <span className="text-sm text-stone-500">Dondurmacı Zeki</span>
                 </div>

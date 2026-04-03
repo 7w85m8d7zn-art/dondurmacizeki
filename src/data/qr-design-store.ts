@@ -84,7 +84,7 @@ export async function getQrDesignManagementData(
     .select("*")
     .order("updatedAt", { ascending: false })
 
-  throwIfSupabaseError(error, "QR tasarim listesi alinamadi")
+  throwIfSupabaseError(error, "QR tasarım listesi alınamadı")
 
   const designs = ((data ?? []) as QrDesignRow[]).map(toQrDesignEntity)
 
@@ -140,7 +140,7 @@ export async function createQrDesign(values: QrDesignFormValues) {
     .select("*")
     .single()
 
-  throwIfSupabaseError(error, "QR tasarimi olusturulamadi")
+  throwIfSupabaseError(error, "QR tasarımı oluşturulamadı")
 
   return toQrDesignEntity(data as QrDesignRow)
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { startTransition, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import {
   ChevronDown,
   ChevronUp,
@@ -9,7 +9,6 @@ import {
   Power,
   Trash2,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 import { CategoryFormPanel } from "@/components/admin/category-form-panel"
 import { MenuFormPanel } from "@/components/admin/menu-form-panel"
@@ -66,7 +65,6 @@ export function MenuManagementClient({
   initialData,
   initialCatalog,
 }: MenuManagementClientProps) {
-  const router = useRouter()
   const [data, setData] = useState<MenuManagementData>(normalizeMenuData(initialData))
   const [catalogState, setCatalogState] = useState<CatalogManagementData>(
     normalizeCatalogData(initialCatalog),
@@ -261,7 +259,7 @@ export function MenuManagementClient({
 
     if (!values.branchId) {
       const nextMessage =
-        "Menu olusturmak icin once en az bir sube eklemelisin."
+        "Menü oluşturmak için önce en az bir şube eklemelisin."
       setMenuFormError(nextMessage)
       setFeedback(nextMessage)
       return
@@ -297,7 +295,6 @@ export function MenuManagementClient({
       setSelectedMenuId(payload.data.id)
       setMenuFormError(null)
       setFeedback("Yeni menü başarıyla eklendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       const nextMessage =
         error instanceof Error ? error.message : "Menü oluşturulamadı."
@@ -326,7 +323,6 @@ export function MenuManagementClient({
 
       await refreshAll()
       setFeedback("Menü silindi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Menü silinemedi.")
     }
@@ -361,7 +357,6 @@ export function MenuManagementClient({
       }
 
       setFeedback("Menü durumu güncellendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(
         error instanceof Error ? error.message : "Menü durumu güncellenemedi.",
@@ -413,7 +408,6 @@ export function MenuManagementClient({
       await updateMenuOrder(targetMenu, menu.sortOrder)
       await refreshAll()
       setFeedback("Menü sırası güncellendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(
         error instanceof Error ? error.message : "Menü sırası güncellenemedi.",
@@ -462,7 +456,6 @@ export function MenuManagementClient({
       setSelectedMenuId(payload.data.id)
       setIsMenuModalOpen(false)
       setFeedback("Menü güncellendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       const nextMessage =
         error instanceof Error ? error.message : "Menü güncellenemedi."
@@ -499,7 +492,6 @@ export function MenuManagementClient({
       setIsCategoryModalOpen(false)
       setEditingCategory(null)
       setFeedback("Kategori başarıyla eklendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(
         error instanceof Error ? error.message : "Kategori oluşturulamadı.",
@@ -538,7 +530,6 @@ export function MenuManagementClient({
       setIsCategoryModalOpen(false)
       setEditingCategory(null)
       setFeedback("Kategori güncellendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(
         error instanceof Error ? error.message : "Kategori güncellenemedi.",
@@ -581,7 +572,6 @@ export function MenuManagementClient({
       }
 
       setFeedback("Kategori ve bağlı ürünler silindi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Kategori silinemedi.")
     }
@@ -611,7 +601,6 @@ export function MenuManagementClient({
       setEditingProduct(null)
       setIsProductPanelOpen(false)
       setFeedback("Ürün başarıyla eklendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Ürün oluşturulamadı.")
     }
@@ -645,7 +634,6 @@ export function MenuManagementClient({
       setEditingProduct(null)
       setIsProductPanelOpen(false)
       setFeedback("Ürün güncellendi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Ürün güncellenemedi.")
     }
@@ -674,7 +662,6 @@ export function MenuManagementClient({
       }
 
       setFeedback("Ürün silindi.")
-      startTransition(() => router.refresh())
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Ürün silinemedi.")
     }
@@ -701,7 +688,7 @@ export function MenuManagementClient({
 
                 if (!draft) {
                   const nextMessage =
-                    "Menu olusturmak icin once en az bir sube eklemelisin."
+                    "Menü oluşturmak için önce en az bir şube eklemelisin."
                   setMenuFormError(nextMessage)
                   setFeedback(nextMessage)
                   return
@@ -943,7 +930,7 @@ export function MenuManagementClient({
                   }}
                   className="rounded-full border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 transition hover:bg-white"
                 >
-                  {category.name} · {category.productCount} urun
+                  {category.name} · {category.productCount} ürün
                 </button>
               ))
             ) : (

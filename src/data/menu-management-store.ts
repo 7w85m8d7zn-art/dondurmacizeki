@@ -71,7 +71,7 @@ async function fetchMenus(menuIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Menu listesi alinamadi")
+  throwIfSupabaseError(error, "Menü listesi alınamadı")
 
   return (data ?? []) as MenuRow[]
 }
@@ -93,7 +93,7 @@ async function fetchBranchMenus(menuIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Branch-menu iliskileri alinamadi")
+  throwIfSupabaseError(error, "Şube-menü ilişkileri alınamadı")
 
   return (data ?? []) as BranchMenuRow[]
 }
@@ -115,7 +115,7 @@ async function fetchCategories(menuIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Kategori listesi alinamadi")
+  throwIfSupabaseError(error, "Kategori listesi alınamadı")
 
   return (data ?? []) as CategoryRow[]
 }
@@ -134,7 +134,7 @@ async function fetchProducts(categoryIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Urun listesi alinamadi")
+  throwIfSupabaseError(error, "Ürün listesi alınamadı")
 
   return (data ?? []) as ProductRow[]
 }
@@ -156,7 +156,7 @@ async function fetchBranches(branchIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Sube listesi alinamadi")
+  throwIfSupabaseError(error, "Şube listesi alınamadı")
 
   return (data ?? []) as BranchRow[]
 }
@@ -195,7 +195,7 @@ function mapMenuRecord(menu: {
     coverImageUrl: menu.coverImageUrl,
     slug: menu.slug,
     branchId: branchRelation?.branchId ?? "",
-    branchName: branchRelation?.branch.name ?? "Sube bulunamadi",
+    branchName: branchRelation?.branch.name ?? "Şube bulunamadı",
     status: menu.isActive ? "active" : "passive",
     sortOrder: menu.sortOrder,
     categoryCount: menu.categories.length,
@@ -220,6 +220,8 @@ async function buildMenuItems(menuIds?: string[]) {
 
   const branchById = new Map(branches.map((branch) => [branch.id, branch]))
   const productCountByCategoryId = new Map<string, number>()
+  const branchMenusByMenuId = new Map<string, BranchMenuRow[]>()
+  const categoriesByMenuId = new Map<string, CategoryRow[]>()
 
   for (const product of products) {
     productCountByCategoryId.set(
@@ -228,19 +230,29 @@ async function buildMenuItems(menuIds?: string[]) {
     )
   }
 
+  for (const relation of branchMenus) {
+    const current = branchMenusByMenuId.get(relation.menuId) ?? []
+    current.push(relation)
+    branchMenusByMenuId.set(relation.menuId, current)
+  }
+
+  for (const category of categories) {
+    const current = categoriesByMenuId.get(category.menuId) ?? []
+    current.push(category)
+    categoriesByMenuId.set(category.menuId, current)
+  }
+
   return menus.map((menu) => {
-    const menuBranchMenus = branchMenus
-      .filter((branchMenu) => branchMenu.menuId === menu.id)
+    const menuBranchMenus = (branchMenusByMenuId.get(menu.id) ?? [])
       .sort((first, second) => first.sortOrder - second.sortOrder)
       .map((branchMenu) => ({
         branchId: branchMenu.branchId,
         branch: {
-          name: branchById.get(branchMenu.branchId)?.name ?? "Sube bulunamadi",
+          name: branchById.get(branchMenu.branchId)?.name ?? "Şube bulunamadı",
         },
       }))
 
-    const menuCategories = categories
-      .filter((category) => category.menuId === menu.id)
+    const menuCategories = (categoriesByMenuId.get(menu.id) ?? [])
       .map((category) => ({
         _count: {
           products: productCountByCategoryId.get(category.id) ?? 0,
@@ -323,7 +335,7 @@ export async function createMenu(values: MenuFormValues) {
     .select("*")
     .single()
 
-  throwIfSupabaseError(menuError, "Menu olusturulamadi")
+  throwIfSupabaseError(menuError, "Menü oluşturulamadı")
 
   const { error: relationError } = await supabase.from("BranchMenu").insert({
     branchId: values.branchId,
@@ -333,12 +345,12 @@ export async function createMenu(values: MenuFormValues) {
     sortOrder: values.sortOrder,
   })
 
-  throwIfSupabaseError(relationError, "Menu-sube iliskisi olusturulamadi")
+  throwIfSupabaseError(relationError, "Menü-şube ilişkisi oluşturulamadı")
 
   const created = await getMenuById(menu.id)
 
   if (!created) {
-    throw new Error("Olusturulan menu alinamadi")
+    throw new Error("Oluşturulan menü alınamadı")
   }
 
   return created
@@ -530,6 +542,20 @@ export async function getMenusByBranchId(branchId: string) {
   return buildMenuItems(menuIds)
 }
 
+export async function getMenuRelationCountByBranchId(branchId: string) {
+  const supabase = getSupabaseAdminClient()
+  const { count, error } = await supabase
+    .from("BranchMenu")
+    .select("id", { count: "exact", head: true })
+    .eq("branchId", branchId)
+
+  if (error) {
+    return 0
+  }
+
+  return count ?? 0
+}
+
 export async function getMenuName(menuId: string) {
   const supabase = getSupabaseAdminClient()
   const { data, error } = await supabase
@@ -539,8 +565,8 @@ export async function getMenuName(menuId: string) {
     .maybeSingle()
 
   if (error) {
-    return "Menu bulunamadi"
+    return "Menü bulunamadı"
   }
 
-  return data?.name ?? "Menu bulunamadi"
+  return data?.name ?? "Menü bulunamadı"
 }

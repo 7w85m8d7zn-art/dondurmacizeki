@@ -10,14 +10,14 @@ export function ProductTable({ rows }: ProductTableProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <h3 className="text-lg font-semibold tracking-tight text-stone-950 sm:text-xl">
-            Son Eklenen Urunler
+            Son Eklenen Ürünler
           </h3>
           <p className="mt-2 text-sm leading-6 text-stone-500">
-            Son eklenen ve guncellenen urunleri hizli gor.
+            Son eklenen ve güncellenen ürünleri hızlı gör.
           </p>
         </div>
         <span className="w-fit rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700">
-          Guncel
+          Güncel
         </span>
       </div>
 
@@ -45,7 +45,7 @@ export function ProductTable({ rows }: ProductTableProps) {
               </span>
             </div>
             <button className="w-fit rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-stone-800">
-              Duzenle
+              Düzenle
             </button>
           </article>
         ))}

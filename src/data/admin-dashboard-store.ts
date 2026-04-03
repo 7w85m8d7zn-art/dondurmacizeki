@@ -8,6 +8,11 @@ import {
 } from "@/data/home-content-store"
 import { getMenuManagementData } from "@/data/menu-management-store"
 import type { ActivityItem, AdminDashboardData } from "@/types/admin"
+import type { BranchManagementItem } from "@/types/branch-management"
+import type { CatalogManagementData } from "@/types/catalog-management"
+import type { HomeContentConfig } from "@/types/home-content-management"
+import type { HomePageContentView } from "@/data/home-content-store"
+import type { MenuManagementData } from "@/types/menu-management"
 
 function getLocationLabel(_count: number) {
   return "konum"
@@ -55,14 +60,20 @@ function getRelativeTimeLabel(input: string) {
   return `${diffDays} gün önce`
 }
 
-async function buildActivities(): Promise<ActivityItem[]> {
-  const [homeContent, homePage, menuData, catalogData, branches] = await Promise.all([
-    getHomeContentConfig(),
-    getHomePageContentView(),
-    getMenuManagementData(),
-    getCatalogManagementData(),
-    getBranchRecords(),
-  ])
+function buildActivities(input: {
+  homeContent: HomeContentConfig
+  homePage: HomePageContentView
+  menuData: MenuManagementData
+  catalogData: CatalogManagementData
+  branches: BranchManagementItem[]
+}): ActivityItem[] {
+  const {
+    homeContent,
+    homePage,
+    menuData,
+    catalogData,
+    branches,
+  } = input
 
   const latestMenu = menuData.menus
     .slice()
@@ -195,15 +206,21 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData & {
   const now = new Date()
 
   try {
-    const [homeContent, homePage, branchRecords, menuData, catalogData, activities] =
+    const [homeContent, homePage, branchRecords, menuData, catalogData] =
       await Promise.all([
         getHomeContentConfig(),
         getHomePageContentView(),
         getBranchRecords(),
         getMenuManagementData(),
         getCatalogManagementData(),
-        buildActivities(),
       ])
+    const activities = buildActivities({
+      homeContent,
+      homePage,
+      menuData,
+      catalogData,
+      branches: branchRecords,
+    })
 
     const visibleBranchIds = new Set(homePage.branches.map((branch) => branch.id))
     const activeBranches = branchRecords.filter((branch) => visibleBranchIds.has(branch.id))

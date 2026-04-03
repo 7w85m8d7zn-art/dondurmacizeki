@@ -20,7 +20,7 @@ export async function getQrDesignRecord(designId: string) {
   const design = await getQrDesignById(designId, getBranchNameById, resolveMenuName)
 
   if (!design) {
-    throw notFound("QR tasarimi bulunamadi.")
+    throw notFound("QR tasarımı bulunamadı.")
   }
 
   return design
@@ -30,7 +30,7 @@ export async function createQrDesignRecord(values: QrDesignFormValues) {
   await validateQrDependencies(values.branchId, values.menuId)
 
   if (await hasQrDesignConflict(values.branchId, values.menuId)) {
-    throw conflict("Bu sube ve menu icin zaten bir QR tasarimi var.")
+    throw conflict("Bu şube ve menü için zaten bir QR tasarımı var.")
   }
 
   return shapeQrDesignResponse(await createQrDesign(values))
@@ -40,13 +40,13 @@ export async function updateQrDesignRecord(designId: string, values: QrDesignFor
   await validateQrDependencies(values.branchId, values.menuId)
 
   if (await hasQrDesignConflict(values.branchId, values.menuId, designId)) {
-    throw conflict("Bu sube ve menu icin zaten bir QR tasarimi var.")
+    throw conflict("Bu şube ve menü için zaten bir QR tasarımı var.")
   }
 
   const design = await updateQrDesign(designId, values)
 
   if (!design) {
-    throw notFound("QR tasarimi bulunamadi.")
+    throw notFound("QR tasarımı bulunamadı.")
   }
 
   return shapeQrDesignResponse(design)
@@ -56,7 +56,7 @@ export async function deleteQrDesignRecord(designId: string) {
   const deleted = await deleteQrDesign(designId)
 
   if (!deleted) {
-    throw notFound("QR tasarimi bulunamadi.")
+    throw notFound("QR tasarımı bulunamadı.")
   }
 
   return { id: designId }
@@ -64,11 +64,11 @@ export async function deleteQrDesignRecord(designId: string) {
 
 async function validateQrDependencies(branchId: string, menuId: string) {
   if (!(await hasBranch(branchId))) {
-    throw badRequest("Secilen sube bulunamadi.")
+    throw badRequest("Seçilen şube bulunamadı.")
   }
 
   if (!(await getMenuById(menuId))) {
-    throw badRequest("Secilen menu bulunamadi.")
+    throw badRequest("Seçilen menü bulunamadı.")
   }
 }
 

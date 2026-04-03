@@ -10,14 +10,14 @@ export function DashboardReviewList({ items }: DashboardReviewListProps) {
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">
-            Son Guncellemeler
+            Son Güncellemeler
           </p>
           <h3 className="mt-2 text-lg font-semibold tracking-tight text-stone-950">
-            Siteden cekilen anlik durum
+            Siteden çekilen anlık durum
           </h3>
         </div>
         <button className="text-[11px] font-semibold uppercase tracking-[0.18em] text-red-500 transition hover:text-red-600">
-          Veri Ozeti
+          Veri Özeti
         </button>
       </div>
 

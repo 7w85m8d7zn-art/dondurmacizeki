@@ -5,7 +5,7 @@ import {
   getMenuDetail,
   getMenuManagementData,
   getMenuName,
-  getMenusByBranchId,
+  getMenuRelationCountByBranchId,
   isBranchValid,
   isMenuNameTaken,
   isMenuSlugTaken,
@@ -32,7 +32,7 @@ export async function getMenuRecord(menuId: string) {
   const menu = await getMenuDetail(menuId)
 
   if (!menu) {
-    throw notFound("Menu bulunamadi.")
+    throw notFound("Menü bulunamadı.")
   }
 
   return menu
@@ -40,15 +40,15 @@ export async function getMenuRecord(menuId: string) {
 
 export async function createMenuRecord(values: MenuFormValues) {
   if (!(await isBranchValid(values.branchId))) {
-    throw badRequest("Secilen sube bulunamadi.")
+    throw badRequest("Seçilen şube bulunamadı.")
   }
 
   if (await isMenuNameTaken(values.name)) {
-    throw conflict("Bu isimde bir menu zaten bulunuyor.")
+    throw conflict("Bu isimde bir menü zaten bulunuyor.")
   }
 
   if (await isMenuSlugTaken(values.slug)) {
-    throw conflict("Bu menuye ait baglanti kisa adi zaten kullanimda.")
+    throw conflict("Bu menüye ait bağlantı kısa adı zaten kullanımda.")
   }
 
   const menu = await createMenu(values)
@@ -64,21 +64,21 @@ export async function createMenuRecord(values: MenuFormValues) {
 
 export async function updateMenuRecord(menuId: string, values: MenuFormValues) {
   if (!(await isBranchValid(values.branchId))) {
-    throw badRequest("Secilen sube bulunamadi.")
+    throw badRequest("Seçilen şube bulunamadı.")
   }
 
   if (await isMenuNameTaken(values.name, menuId)) {
-    throw conflict("Bu isimde bir menu zaten bulunuyor.")
+    throw conflict("Bu isimde bir menü zaten bulunuyor.")
   }
 
   if (await isMenuSlugTaken(values.slug, menuId)) {
-    throw conflict("Bu menuye ait baglanti kisa adi zaten kullanimda.")
+    throw conflict("Bu menüye ait bağlantı kısa adı zaten kullanımda.")
   }
 
   const menu = await updateMenu(menuId, values)
 
   if (!menu) {
-    throw notFound("Menu bulunamadi.")
+    throw notFound("Menü bulunamadı.")
   }
 
   await updateMenuOption(menu.id, {
@@ -93,7 +93,7 @@ export async function deleteMenuCascade(menuId: string) {
   const menu = await getMenuById(menuId)
 
   if (!menu) {
-    throw notFound("Menu bulunamadi.")
+    throw notFound("Menü bulunamadı.")
   }
 
   await deleteCategoriesByMenuId(menuId)
@@ -103,7 +103,7 @@ export async function deleteMenuCascade(menuId: string) {
   const deleted = await deleteMenu(menuId)
 
   if (!deleted) {
-    throw badRequest("Menu silinemedi.")
+    throw badRequest("Menü silinemedi.")
   }
 
   return { id: menuId }
@@ -113,14 +113,14 @@ export async function toggleMenuRecord(menuId: string) {
   const menu = await toggleMenuStatus(menuId)
 
   if (!menu) {
-    throw notFound("Menu bulunamadi.")
+    throw notFound("Menü bulunamadı.")
   }
 
   return menu
 }
 
 export async function getMenuCountByBranchId(branchId: string) {
-  return (await getMenusByBranchId(branchId)).length
+  return getMenuRelationCountByBranchId(branchId)
 }
 
 export async function resolveMenuName(menuId: string) {

@@ -1,8 +1,7 @@
 "use client"
 
-import { startTransition, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Pencil, Plus, Trash2 } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 import { CategoryFormPanel } from "@/components/admin/category-form-panel"
 import { ProductFormPanel } from "@/components/admin/product-form-panel"
@@ -28,7 +27,6 @@ export function MenuDetailClient({
   menu,
   catalog,
 }: MenuDetailClientProps) {
-  const router = useRouter()
   const [catalogState, setCatalogState] = useState(catalog)
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
@@ -73,7 +71,7 @@ export function MenuDetailClient({
       (await response.json()) as ApiSuccessResponse<CatalogManagementData>
 
     if (!payload.success) {
-      throw new Error("Menu icerigi yenilenemedi.")
+      throw new Error("Menü içeriği yenilenemedi.")
     }
 
     setCatalogState(payload.data)
@@ -98,7 +96,7 @@ export function MenuDetailClient({
         | ApiErrorResponse
 
       if (!response.ok || !payload.success) {
-        throw new Error(payload.message ?? "Kategori olusturulamadi.")
+        throw new Error(payload.message ?? "Kategori oluşturulamadı.")
       }
 
       const nextCatalog = await refreshCatalog()
@@ -108,11 +106,10 @@ export function MenuDetailClient({
           null,
       )
       setIsCategoryModalOpen(false)
-      setFeedback("Kategori basariyla eklendi.")
-      startTransition(() => router.refresh())
+      setFeedback("Kategori başarıyla eklendi.")
     } catch (error) {
       setFeedback(
-        error instanceof Error ? error.message : "Kategori olusturulamadi.",
+        error instanceof Error ? error.message : "Kategori oluşturulamadı.",
       )
     } finally {
       setIsBusy(false)
@@ -144,18 +141,17 @@ export function MenuDetailClient({
         | ApiErrorResponse
 
       if (!response.ok || !payload.success) {
-        throw new Error(payload.message ?? "Kategori guncellenemedi.")
+        throw new Error(payload.message ?? "Kategori güncellenemedi.")
       }
 
       await refreshCatalog()
       setEditingCategory(payload.data)
       setSelectedCategoryId(payload.data.id)
       setIsCategoryModalOpen(false)
-      setFeedback("Kategori guncellendi.")
-      startTransition(() => router.refresh())
+      setFeedback("Kategori güncellendi.")
     } catch (error) {
       setFeedback(
-        error instanceof Error ? error.message : "Kategori guncellenemedi.",
+        error instanceof Error ? error.message : "Kategori güncellenemedi.",
       )
     } finally {
       setIsBusy(false)
@@ -164,7 +160,7 @@ export function MenuDetailClient({
 
   async function handleDeleteCategory(categoryId: string) {
     const confirmed = window.confirm(
-      "Bu kategoriyi ve bagli urunleri silmek istediginize emin misiniz?",
+      "Bu kategoriyi ve bağlı ürünleri silmek istediğinize emin misiniz?",
     )
 
     if (!confirmed) {
@@ -193,7 +189,7 @@ export function MenuDetailClient({
       setSelectedCategoryId(nextSelectedCategory)
       setEditingCategory(null)
       setEditingProduct(null)
-      setFeedback("Kategori ve bagli urunler silindi.")
+      setFeedback("Kategori ve bağlı ürünler silindi.")
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Kategori silinemedi.")
     } finally {
@@ -219,16 +215,15 @@ export function MenuDetailClient({
         | ApiErrorResponse
 
       if (!response.ok || !payload.success) {
-        throw new Error(payload.message ?? "Urun olusturulamadi.")
+        throw new Error(payload.message ?? "Ürün oluşturulamadı.")
       }
 
       await refreshCatalog()
       setEditingProduct(payload.data)
       setSelectedCategoryId(payload.data.categoryId)
-      setFeedback("Urun basariyla eklendi.")
-      startTransition(() => router.refresh())
+      setFeedback("Ürün başarıyla eklendi.")
     } catch (error) {
-      setFeedback(error instanceof Error ? error.message : "Urun olusturulamadi.")
+      setFeedback(error instanceof Error ? error.message : "Ürün oluşturulamadı.")
     } finally {
       setIsBusy(false)
     }
@@ -256,23 +251,22 @@ export function MenuDetailClient({
         | ApiErrorResponse
 
       if (!response.ok || !payload.success) {
-        throw new Error(payload.message ?? "Urun guncellenemedi.")
+        throw new Error(payload.message ?? "Ürün güncellenemedi.")
       }
 
       await refreshCatalog()
       setEditingProduct(payload.data)
       setSelectedCategoryId(payload.data.categoryId)
-      setFeedback("Urun guncellendi.")
-      startTransition(() => router.refresh())
+      setFeedback("Ürün güncellendi.")
     } catch (error) {
-      setFeedback(error instanceof Error ? error.message : "Urun guncellenemedi.")
+      setFeedback(error instanceof Error ? error.message : "Ürün güncellenemedi.")
     } finally {
       setIsBusy(false)
     }
   }
 
   async function handleDeleteProduct(productId: string) {
-    const confirmed = window.confirm("Bu urunu silmek istediginize emin misiniz?")
+    const confirmed = window.confirm("Bu ürünü silmek istediğinize emin misiniz?")
 
     if (!confirmed) {
       return
@@ -290,16 +284,16 @@ export function MenuDetailClient({
         | ApiErrorResponse
 
       if (!response.ok || !payload.success) {
-        throw new Error(payload.message ?? "Urun silinemedi.")
+        throw new Error(payload.message ?? "Ürün silinemedi.")
       }
 
       await refreshCatalog()
       if (editingProduct?.id === productId) {
         setEditingProduct(null)
       }
-      setFeedback("Urun silindi.")
+      setFeedback("Ürün silindi.")
     } catch (error) {
-      setFeedback(error instanceof Error ? error.message : "Urun silinemedi.")
+      setFeedback(error instanceof Error ? error.message : "Ürün silinemedi.")
     } finally {
       setIsBusy(false)
     }
@@ -310,14 +304,14 @@ export function MenuDetailClient({
       <section className="rounded-[1.9rem] border border-stone-200 bg-white p-5 shadow-[0_12px_30px_rgba(28,25,23,0.04)]">
         <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">
-            Menu Icerigi Yonetimi
+            Menü İçeriği Yönetimi
           </p>
           <h1 className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl">
             {menu.name}
           </h1>
           <p className="max-w-3xl text-sm leading-7 text-stone-500">
-            Kategoriye tikla, o kategoriye ait urunler sag tarafta gelsin. Boylesiyle
-            admin kisi menu icini daha hizli ve dogrudan yonetebilir.
+            Kategoriye tıkla, o kategoriye ait ürünler sağ tarafta açılsın. Böylece
+            admin, menü içini daha hızlı ve doğrudan yönetebilir.
           </p>
         </div>
       </section>
@@ -337,7 +331,7 @@ export function MenuDetailClient({
                   Kategoriler
                 </h2>
                 <p className="mt-1 text-sm text-stone-500">
-                  Hangi kategoriye basarsan urunleri acilir.
+                  Hangi kategoriye basarsan ürünleri açılır.
                 </p>
               </div>
               <button
@@ -385,7 +379,7 @@ export function MenuDetailClient({
                             : "bg-white text-stone-600",
                         )}
                       >
-                        {category.productCount} urun
+                        {category.productCount} ürün
                       </span>
                     </div>
                     <p
@@ -414,7 +408,7 @@ export function MenuDetailClient({
                           ? "border-white/10 bg-white/10 text-white"
                           : "border-stone-200 bg-white text-stone-500",
                       )}
-                      aria-label="Kategori duzenle"
+                      aria-label="Kategori düzenle"
                     >
                       <Pencil className="size-4" />
                     </button>
@@ -440,7 +434,7 @@ export function MenuDetailClient({
 
               {menuCategories.length === 0 ? (
                 <div className="rounded-[1.25rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-6 text-sm text-stone-500">
-                  Bu menuye ait kategori yok. Once kategori ekleyelim.
+                  Bu menüye ait kategori yok. Önce kategori ekleyelim.
                 </div>
               ) : null}
             </div>
@@ -453,14 +447,14 @@ export function MenuDetailClient({
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">
-                  Urunler
+                  Ürünler
                 </p>
                 <h2 className="mt-2 text-xl font-semibold tracking-tight text-stone-950 sm:text-2xl">
-                  {selectedCategory?.name ?? "Kategori secin"}
+                  {selectedCategory?.name ?? "Kategori seçin"}
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-stone-500">
-                  Ornek akista oldugu gibi: `Tatlilar - Kunefe Cesitleri` gibi bir
-                  kategoriye bas ve ilgili urunleri tek alanda duzenle.
+                  Örnek akışta olduğu gibi: `Tatlılar - Künefe Çeşitleri` gibi bir
+                  kategoriye bas ve ilgili ürünleri tek alanda düzenle.
                 </p>
               </div>
               <button
@@ -470,7 +464,7 @@ export function MenuDetailClient({
                 className="inline-flex items-center gap-2 rounded-full bg-[#ef1c24] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#dd161f] disabled:cursor-not-allowed disabled:bg-stone-300"
               >
                 <Plus className="size-4" />
-                Urun Ekle
+                Ürün Ekle
               </button>
             </div>
 
@@ -511,7 +505,7 @@ export function MenuDetailClient({
                           {product.status === "active" ? "Aktif" : "Pasif"}
                         </span>
                         <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-stone-700">
-                          Sira {product.sortOrder}
+                          Sıra {product.sortOrder}
                         </span>
                       </div>
                     </div>
@@ -521,7 +515,7 @@ export function MenuDetailClient({
                         onClick={() => setEditingProduct(product)}
                         disabled={isBusy}
                         className="inline-flex size-9 items-center justify-center rounded-xl border border-stone-200 bg-white text-stone-500 transition hover:bg-stone-100 hover:text-stone-950"
-                        aria-label="Urun duzenle"
+                        aria-label="Ürün düzenle"
                       >
                         <Pencil className="size-4" />
                       </button>
@@ -530,7 +524,7 @@ export function MenuDetailClient({
                         onClick={() => void handleDeleteProduct(product.id)}
                         disabled={isBusy}
                         className="inline-flex size-9 items-center justify-center rounded-xl border border-stone-200 bg-white text-stone-500 transition hover:bg-stone-100 hover:text-stone-950"
-                        aria-label="Urun sil"
+                        aria-label="Ürün sil"
                       >
                         <Trash2 className="size-4" />
                       </button>
@@ -540,8 +534,8 @@ export function MenuDetailClient({
               ) : (
                 <div className="rounded-[1.25rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-8 text-sm text-stone-500">
                   {selectedCategoryId
-                    ? "Bu kategoriye ait urun yok. Yeni urun ekleyebilirsin."
-                    : "Urunleri gormek icin once soldan bir kategori sec."}
+                    ? "Bu kategoriye ait ürün yok. Yeni ürün ekleyebilirsin."
+                    : "Ürünleri görmek için önce soldan bir kategori seç."}
                 </div>
               )}
             </div>

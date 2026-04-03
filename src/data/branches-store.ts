@@ -68,7 +68,7 @@ async function fetchBranches() {
     .select("*")
     .order("sortOrder", { ascending: true })
 
-  throwIfSupabaseError(error, "Branch listesi alinamadi")
+  throwIfSupabaseError(error, "Şube listesi alınamadı")
   return (data ?? []) as BranchRecord[]
 }
 
@@ -145,7 +145,7 @@ export async function getBranchById(branchId: string) {
       .eq("id", branchId)
       .maybeSingle()
 
-    throwIfSupabaseError(error, "Sube detayi alinamadi")
+    throwIfSupabaseError(error, "Şube detayı alınamadı")
 
     return data ? mapBranch(data as BranchRecord) : null
   } catch (error) {
@@ -180,7 +180,7 @@ export async function createBranch(values: BranchFormValues) {
     .select("*")
     .single()
 
-  throwIfSupabaseError(error, "Sube olusturulamadi")
+  throwIfSupabaseError(error, "Şube oluşturulamadı")
 
   return mapBranch(data as BranchRecord)
 }
@@ -275,7 +275,7 @@ export async function isBranchSlugTaken(
 
     const { data, error } = await query.limit(1).maybeSingle()
 
-    throwIfSupabaseError(error, "Sube slug kontrolu basarisiz")
+    throwIfSupabaseError(error, "Şube slug kontrolü başarısız")
 
     return Boolean(data)
   } catch (error) {
@@ -303,7 +303,7 @@ export async function hasBranch(branchId: string, status?: BranchStatus) {
 
     const { data, error } = await query.limit(1).maybeSingle()
 
-    throwIfSupabaseError(error, "Sube varlik kontrolu basarisiz")
+    throwIfSupabaseError(error, "Şube varlık kontrolü başarısız")
 
     return Boolean(data)
   } catch (error) {
@@ -333,9 +333,9 @@ export async function getBranchNameById(branchId: string) {
       .eq("id", branchId)
       .maybeSingle()
 
-    throwIfSupabaseError(error, "Sube adi alinamadi")
+    throwIfSupabaseError(error, "Şube adı alınamadı")
 
-    return data?.name ?? "Sube bulunamadi"
+    return data?.name ?? "Şube bulunamadı"
   } catch (error) {
     if (!shouldUseSupabaseFallback(error)) {
       throw error
@@ -343,7 +343,7 @@ export async function getBranchNameById(branchId: string) {
 
     return (
       getFallbackBranchRecords().find((branch) => branch.id === branchId)?.name ??
-      "Sube bulunamadi"
+      "Şube bulunamadı"
     )
   }
 }

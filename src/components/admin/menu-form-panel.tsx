@@ -113,7 +113,7 @@ export function MenuFormPanel({
         <div className="px-8 pt-9 pb-8 sm:px-9">
           <div className="min-w-0">
             <p className="text-[2rem] font-black uppercase leading-none tracking-tight text-stone-950">
-              {mode === "create" ? "Yeni: Menu" : "Duzenle: Menu"}
+              {mode === "create" ? "Yeni: Menü" : "Düzenle: Menü"}
             </p>
           </div>
 
@@ -136,17 +136,17 @@ export function MenuFormPanel({
             ) : null}
 
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-[#8fa1ba]">Isim / Baslik</span>
+              <span className="text-sm font-semibold text-[#8fa1ba]">İsim / Başlık</span>
               <input
                 {...form.register("name")}
                 className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm font-semibold uppercase text-stone-950 outline-none transition focus:border-stone-400"
-                placeholder="KARAKOPRU MENUSU"
+                placeholder="KARAKÖPRÜ MENÜSÜ"
               />
               <FieldError message={form.formState.errors.name?.message} />
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-[#8fa1ba]">Menu Kisa Adi</span>
+              <span className="text-sm font-semibold text-[#8fa1ba]">Menü Kısa Adı</span>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   {...form.register("slug")}
@@ -162,18 +162,18 @@ export function MenuFormPanel({
                   }
                   className="rounded-[1.1rem] border border-stone-200 px-4 py-4 text-sm font-medium text-stone-700 transition hover:bg-stone-50"
                 >
-                  Uret
+                  Üret
                 </button>
               </div>
               <FieldError message={form.formState.errors.slug?.message} />
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-[#8fa1ba]">Kapak Gorseli</span>
+              <span className="text-sm font-semibold text-[#8fa1ba]">Kapak Görseli</span>
               <input
                 {...form.register("coverImageUrl")}
                 className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm text-stone-900 outline-none transition focus:border-stone-400"
-                placeholder="https://... veya yukaridan gorsel sec"
+                placeholder="https://... veya yukarıdan görsel seç"
               />
               <div className="rounded-[1.2rem] border border-dashed border-stone-200 bg-[#fafcff] p-4">
                 <div className="grid gap-4 sm:grid-cols-[160px_minmax(0,1fr)] sm:items-center">
@@ -181,7 +181,7 @@ export function MenuFormPanel({
                     {coverPreview ? (
                       <AppImage
                         src={coverPreview}
-                        alt="Menu kapak gorseli"
+                        alt="Menü kapak görseli"
                         width={320}
                         height={180}
                         className="h-[120px] w-full object-cover"
@@ -195,12 +195,12 @@ export function MenuFormPanel({
 
                   <div className="space-y-3">
                     <p className="text-sm leading-6 text-stone-500">
-                      Menu kartinin ust kapak goruntusu burada kullanilir.
-                      Onerilen oran yatay 16:9.
+                      Menü kartının üst kapak görüntüsü burada kullanılır.
+                      Önerilen oran yatay 16:9.
                     </p>
                     <label className="inline-flex cursor-pointer items-center gap-2 rounded-[0.9rem] border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50">
                       <ImagePlus className="size-4" />
-                      Resim Sec
+                      Resim Seç
                       <input
                         type="file"
                         accept="image/*"
@@ -227,12 +227,12 @@ export function MenuFormPanel({
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-[#8fa1ba]">Aciklama</span>
+              <span className="text-sm font-semibold text-[#8fa1ba]">Açıklama</span>
               <textarea
                 {...form.register("description")}
                 rows={3}
                 className="rounded-[1.1rem] border border-stone-200 bg-stone-50 px-5 py-4 text-sm text-stone-900 outline-none transition focus:border-stone-400"
-                placeholder="Bu menu hangi sube icin hangi urun gruplarini vitrine tasiyor?"
+                placeholder="Bu menü hangi şube için hangi ürün gruplarını vitrine taşıyor?"
               />
               <FieldError message={form.formState.errors.description?.message} />
             </label>
@@ -259,7 +259,7 @@ export function MenuFormPanel({
                   onClick={onCancel}
                   className="rounded-full px-6 py-3 text-sm font-semibold text-slate-500 transition hover:text-slate-800"
                 >
-                  Iptal
+                  İptal
                 </button>
               ) : <div />}
 
@@ -297,11 +297,11 @@ function fileToDataUrl(file: File) {
         return
       }
 
-      reject(new Error("Gorsel verisi okunamadi."))
+      reject(new Error("Görsel verisi okunamadı."))
     }
 
     reader.onerror = () => {
-      reject(new Error("Gorsel verisi okunamadi."))
+      reject(new Error("Görsel verisi okunamadı."))
     }
 
     reader.readAsDataURL(file)

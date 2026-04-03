@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const parsed = categoryFormSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Kategori formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Kategori formu geçersiz.", parsed.error.flatten())
     }
 
     const created = await createCategoryRecord(parsed.data)
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     return successResponse(created, {
       status: 201,
-      message: "Kategori olusturuldu.",
+      message: "Kategori oluşturuldu.",
     })
   })
 }

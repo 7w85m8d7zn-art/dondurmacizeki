@@ -20,7 +20,7 @@ export async function PATCH(request: Request, context: ProductRouteContext) {
     const parsed = productFormSchema.safeParse(payload)
 
     if (!parsed.success) {
-      throw badRequest("Urun formu gecersiz.", parsed.error.flatten())
+      throw badRequest("Ürün formu geçersiz.", parsed.error.flatten())
     }
 
     const updated = await updateProductRecord(productId, parsed.data)
@@ -28,7 +28,7 @@ export async function PATCH(request: Request, context: ProductRouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(updated, {
-      message: "Urun guncellendi.",
+      message: "Ürün güncellendi.",
     })
   })
 }
@@ -41,7 +41,7 @@ export async function DELETE(_: Request, context: ProductRouteContext) {
     revalidatePath("/admin/menuler")
 
     return successResponse(deleted, {
-      message: "Urun silindi.",
+      message: "Ürün silindi.",
     })
   })
 }

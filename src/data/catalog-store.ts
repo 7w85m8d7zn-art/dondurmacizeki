@@ -73,7 +73,7 @@ function mapMenuOption(menu: {
   return {
     id: menu.id,
     name: menu.name,
-    branchName: menu.branchMenus[0]?.branch.name ?? "Sube bulunamadi",
+    branchName: menu.branchMenus[0]?.branch.name ?? "Şube bulunamadı",
     description: menu.description ?? "",
     status: menu.isActive ? "active" : "passive",
     sortOrder: menu.sortOrder,
@@ -145,7 +145,7 @@ async function fetchMenus() {
     .select("id,name,description,isActive,sortOrder")
     .order("sortOrder", { ascending: true })
 
-  throwIfSupabaseError(error, "Menu listesi alinamadi")
+  throwIfSupabaseError(error, "Menü listesi alınamadı")
   return (data ?? []) as MenuRow[]
 }
 
@@ -163,7 +163,7 @@ async function fetchBranches(branchIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Sube listesi alinamadi")
+  throwIfSupabaseError(error, "Şube listesi alınamadı")
 
   return (data ?? []) as BranchRow[]
 }
@@ -185,7 +185,7 @@ async function fetchBranchMenus(menuIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Menu-sube iliskileri alinamadi")
+  throwIfSupabaseError(error, "Menü-şube ilişkileri alınamadı")
 
   return (data ?? []) as BranchMenuRow[]
 }
@@ -207,7 +207,7 @@ async function fetchCategories(menuIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Kategori listesi alinamadi")
+  throwIfSupabaseError(error, "Kategori listesi alınamadı")
 
   return (data ?? []) as CategoryRow[]
 }
@@ -229,7 +229,7 @@ async function fetchProducts(categoryIds?: string[]) {
   }
 
   const { data, error } = await query
-  throwIfSupabaseError(error, "Urun listesi alinamadi")
+  throwIfSupabaseError(error, "Ürün listesi alınamadı")
 
   return (data ?? []) as ProductRow[]
 }
@@ -247,8 +247,17 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
   const branchById = new Map(branches.map((branch) => [branch.id, branch]))
   const menuById = new Map(menus.map((menu) => [menu.id, menu]))
   const categoryById = new Map(categories.map((category) => [category.id, category]))
+  const firstBranchRelationByMenuId = new Map<string, BranchMenuRow>()
 
   const productCountByCategoryId = new Map<string, number>()
+
+  for (const relation of branchMenus) {
+    const existing = firstBranchRelationByMenuId.get(relation.menuId)
+
+    if (!existing || relation.sortOrder < existing.sortOrder) {
+      firstBranchRelationByMenuId.set(relation.menuId, relation)
+    }
+  }
 
   for (const product of products) {
     productCountByCategoryId.set(
@@ -261,21 +270,19 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
     id: category.id,
     name: category.name,
     menuId: category.menuId,
-    menuName: menuById.get(category.menuId)?.name ?? "Menu bulunamadi",
+    menuName: menuById.get(category.menuId)?.name ?? "Menü bulunamadı",
   }))
 
   return {
     menus: menus.map((menu) => {
-      const branchRelation = branchMenus
-        .filter((item) => item.menuId === menu.id)
-        .sort((first, second) => first.sortOrder - second.sortOrder)[0]
+      const branchRelation = firstBranchRelationByMenuId.get(menu.id)
 
       return mapMenuOption({
         ...menu,
         branchMenus: [
           {
             branch: {
-              name: branchById.get(branchRelation?.branchId ?? "")?.name ?? "Sube bulunamadi",
+              name: branchById.get(branchRelation?.branchId ?? "")?.name ?? "Şube bulunamadı",
             },
           },
         ],
@@ -285,7 +292,7 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
       mapCategory({
         ...category,
         menu: {
-          name: menuById.get(category.menuId)?.name ?? "Menu bulunamadi",
+          name: menuById.get(category.menuId)?.name ?? "Menü bulunamadı",
         },
         _count: {
           products: productCountByCategoryId.get(category.id) ?? 0,
@@ -300,10 +307,10 @@ export async function getCatalogManagementData(): Promise<CatalogManagementData>
       return mapProduct({
         ...product,
         category: {
-          name: category?.name ?? "Kategori bulunamadi",
+          name: category?.name ?? "Kategori bulunamadı",
           menuId: category?.menuId ?? "",
           menu: {
-            name: menu?.name ?? "Menu bulunamadi",
+            name: menu?.name ?? "Menü bulunamadı",
           },
         },
       })
@@ -327,9 +334,9 @@ export async function createCategory(values: CategoryFormValues) {
     .select("id,name,description,sortOrder,isActive,menuId")
     .single()
 
-  throwIfSupabaseError(error, "Kategori olusturulamadi")
+  throwIfSupabaseError(error, "Kategori oluşturulamadı")
   if (!category) {
-    throw new Error("Kategori olusturulamadi")
+    throw new Error("Kategori oluşturulamadı")
   }
 
   const { data: menu } = await supabase
@@ -341,7 +348,7 @@ export async function createCategory(values: CategoryFormValues) {
   return mapCategory({
     ...(category as CategoryRow),
     menu: {
-      name: menu?.name ?? "Menu bulunamadi",
+      name: menu?.name ?? "Menü bulunamadı",
     },
     _count: {
       products: 0,
@@ -381,7 +388,7 @@ export async function updateCategory(categoryId: string, values: CategoryFormVal
   return mapCategory({
     ...(category as CategoryRow),
     menu: {
-      name: menu?.name ?? "Menu bulunamadi",
+      name: menu?.name ?? "Menü bulunamadı",
     },
     _count: {
       products: productCount ?? 0,
@@ -403,12 +410,14 @@ export async function deleteCategoriesByMenuId(menuId: string) {
 export async function reorderCategories(orderedIds: string[]) {
   const supabase = getSupabaseAdminClient()
 
-  for (const [index, id] of orderedIds.entries()) {
-    await supabase
-      .from("Category")
-      .update({ sortOrder: index + 1 })
-      .eq("id", id)
-  }
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      supabase
+        .from("Category")
+        .update({ sortOrder: index + 1 })
+        .eq("id", id),
+    ),
+  )
 
   return (await getCatalogManagementData()).categories
 }
@@ -431,9 +440,9 @@ export async function createProduct(values: ProductFormValues) {
     .select("id,name,description,price,imageUrl,isActive,sortOrder,categoryId")
     .single()
 
-  throwIfSupabaseError(error, "Urun olusturulamadi")
+  throwIfSupabaseError(error, "Ürün oluşturulamadı")
   if (!product) {
-    throw new Error("Urun olusturulamadi")
+    throw new Error("Ürün oluşturulamadı")
   }
 
   const { data: category } = await supabase
@@ -451,10 +460,10 @@ export async function createProduct(values: ProductFormValues) {
   return mapProduct({
     ...(product as ProductRow),
     category: {
-      name: category?.name ?? "Kategori bulunamadi",
+      name: category?.name ?? "Kategori bulunamadı",
       menuId: category?.menuId ?? "",
       menu: {
-        name: menu?.name ?? "Menu bulunamadi",
+        name: menu?.name ?? "Menü bulunamadı",
       },
     },
   })
@@ -498,10 +507,10 @@ export async function updateProduct(productId: string, values: ProductFormValues
   return mapProduct({
     ...(product as ProductRow),
     category: {
-      name: category?.name ?? "Kategori bulunamadi",
+      name: category?.name ?? "Kategori bulunamadı",
       menuId: category?.menuId ?? "",
       menu: {
-        name: menu?.name ?? "Menu bulunamadi",
+        name: menu?.name ?? "Menü bulunamadı",
       },
     },
   })
@@ -516,20 +525,23 @@ export async function deleteProduct(productId: string) {
 export async function reorderProducts(orderedIds: string[]) {
   const supabase = getSupabaseAdminClient()
 
-  for (const [index, id] of orderedIds.entries()) {
-    await supabase
-      .from("Product")
-      .update({ sortOrder: index + 1 })
-      .eq("id", id)
-  }
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      supabase
+        .from("Product")
+        .update({ sortOrder: index + 1 })
+        .eq("id", id),
+    ),
+  )
 
   return (await getCatalogManagementData()).products
 }
 
 export async function getCategoriesByMenuId(menuId: string) {
-  const [categories, products, menuResult] = await Promise.all([
-    fetchCategories([menuId]),
-    fetchProducts(),
+  const categories = await fetchCategories([menuId])
+
+  const [products, menuResult] = await Promise.all([
+    fetchProducts(categories.map((category) => category.id)),
     getSupabaseAdminClient().from("Menu").select("name").eq("id", menuId).maybeSingle(),
   ])
 
@@ -548,7 +560,7 @@ export async function getCategoriesByMenuId(menuId: string) {
       mapCategory({
         ...category,
         menu: {
-          name: menuResult.data?.name ?? "Menu bulunamadi",
+          name: menuResult.data?.name ?? "Menü bulunamadı",
         },
         _count: {
           products: productCountByCategoryId.get(category.id) ?? 0,

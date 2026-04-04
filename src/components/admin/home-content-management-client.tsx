@@ -19,6 +19,37 @@ import { visitorData } from "@/data/visitor-content"
 import { homeContentSchema } from "@/lib/validators/home-content-management"
 import type { HomeContentConfig } from "@/types/home-content-management"
 
+type MediaLimits = {
+  maxWidth: number
+  maxHeight: number
+  maxBytes: number
+  maxInputBytes: number
+  outputType: "image/jpeg" | "image/png" | "image/webp"
+  quality: number
+  allowJpegFallback: boolean
+}
+
+const MEDIA_LIMITS = {
+  logo: {
+    maxWidth: 800,
+    maxHeight: 800,
+    maxBytes: 500_000,
+    maxInputBytes: 12_000_000,
+    outputType: "image/png",
+    quality: 0.9,
+    allowJpegFallback: true,
+  },
+  background: {
+    maxWidth: 1920,
+    maxHeight: 1080,
+    maxBytes: 1_500_000,
+    maxInputBytes: 25_000_000,
+    outputType: "image/jpeg",
+    quality: 0.78,
+    allowJpegFallback: false,
+  },
+} as const
+
 interface HomeContentManagementClientProps {
   initialData: HomeContentConfig
 }
@@ -177,6 +208,8 @@ export function HomeContentManagementClient({
               <MediaField
                 title="Kurumsal Logo"
                 preview={logoPreview}
+                limits={MEDIA_LIMITS.logo}
+                onError={(message) => setFeedback({ message, tone: "error" })}
                 onPick={(value) => {
                   setLogoUploadPreview(value)
                   form.setValue("logoUrl", value, {
@@ -193,6 +226,8 @@ export function HomeContentManagementClient({
               <MediaField
                 title="Kapak Fotoğrafı"
                 preview={backgroundPreview}
+                limits={MEDIA_LIMITS.background}
+                onError={(message) => setFeedback({ message, tone: "error" })}
                 onPick={(value) => {
                   setBackgroundUploadPreview(value)
                   form.setValue("backgroundImageUrl", value, {
@@ -384,12 +419,16 @@ function MediaField({
   preview,
   onPick,
   error,
+  limits,
+  onError,
   children,
 }: {
   title: string
   preview: string
   onPick: (value: string) => void
   error?: string
+  limits: MediaLimits
+  onError: (message: string) => void
   children: React.ReactNode
 }) {
   return (
@@ -424,14 +463,33 @@ function MediaField({
               const file = event.target.files?.[0]
               if (!file) return
 
-              const dataUrl = await fileToDataUrl(file)
-              onPick(dataUrl)
+              if (file.size > limits.maxInputBytes) {
+                onError(
+                  `Görsel çok büyük (${formatBytes(file.size)}). Lütfen daha küçük bir dosya seçin.`,
+                )
+                event.target.value = ""
+                return
+              }
+
+              try {
+                const dataUrl = await fileToOptimizedDataUrl(file, limits)
+                onPick(dataUrl)
+              } catch (error) {
+                console.error(error)
+                onError(
+                  error instanceof Error
+                    ? error.message
+                    : "Görsel işlenemedi. Lütfen daha küçük bir dosya deneyin.",
+                )
+              }
               event.target.value = ""
             }}
           />
         </label>
 
-        <p className="text-xs text-stone-400">PNG, JPG veya WEBP. Max 2MB.</p>
+        <p className="text-xs text-stone-400">
+          PNG, JPG veya WEBP. Maks {formatBytes(limits.maxBytes)}.
+        </p>
       </div>
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
     </label>
@@ -476,7 +534,53 @@ function simplifyDomain(url?: string) {
   return cleaned.split("/")[0] ?? cleaned
 }
 
-function fileToDataUrl(file: File) {
+function formatBytes(value: number) {
+  if (value < 1024) return `${value} B`
+  const kb = value / 1024
+  if (kb < 1024) return `${kb.toFixed(0)} KB`
+  return `${(kb / 1024).toFixed(1)} MB`
+}
+
+function loadImage(file: File) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image()
+    const url = URL.createObjectURL(file)
+
+    image.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(image)
+    }
+
+    image.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error("Görsel verisi okunamadı."))
+    }
+
+    image.src = url
+  })
+}
+
+function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  type: MediaLimits["outputType"],
+  quality: number,
+) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Görsel sıkıştırılamadı."))
+          return
+        }
+        resolve(blob)
+      },
+      type,
+      quality,
+    )
+  })
+}
+
+function blobToDataUrl(blob: Blob) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
 
@@ -493,6 +597,51 @@ function fileToDataUrl(file: File) {
       reject(new Error("Görsel verisi okunamadı."))
     }
 
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(blob)
   })
+}
+
+async function fileToOptimizedDataUrl(file: File, limits: MediaLimits) {
+  const image = await loadImage(file)
+  const ratio = Math.min(
+    1,
+    limits.maxWidth / image.width,
+    limits.maxHeight / image.height,
+  )
+  const width = Math.max(1, Math.round(image.width * ratio))
+  const height = Math.max(1, Math.round(image.height * ratio))
+
+  const canvas = document.createElement("canvas")
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext("2d")
+  if (!ctx) {
+    throw new Error("Görsel işlenemedi. Lütfen tekrar deneyin.")
+  }
+
+  ctx.drawImage(image, 0, 0, width, height)
+
+  let outputType = limits.outputType
+  let blob = await canvasToBlob(canvas, outputType, limits.quality)
+
+  if (blob.size > limits.maxBytes && outputType !== "image/png") {
+    const qualities = [0.72, 0.6, 0.5, 0.4]
+    for (const quality of qualities) {
+      blob = await canvasToBlob(canvas, outputType, quality)
+      if (blob.size <= limits.maxBytes) break
+    }
+  }
+
+  if (blob.size > limits.maxBytes && limits.allowJpegFallback) {
+    outputType = "image/jpeg"
+    blob = await canvasToBlob(canvas, outputType, 0.72)
+  }
+
+  if (blob.size > limits.maxBytes) {
+    throw new Error(
+      `Görsel boyutu çok büyük (${formatBytes(blob.size)}). Lütfen daha küçük bir görsel yükleyin.`,
+    )
+  }
+
+  return blobToDataUrl(blob)
 }

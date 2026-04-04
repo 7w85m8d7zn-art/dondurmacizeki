@@ -73,7 +73,7 @@ export function CategoryFormPanel({
 
         <div className="px-8 pt-9 pb-8 sm:px-9">
           <div className="min-w-0">
-            <p className="text-[2rem] font-black uppercase leading-none tracking-tight text-stone-950">
+            <p className="text-[1.6rem] font-black uppercase leading-none tracking-tight text-stone-950 sm:text-[2rem]">
               {initialValues ? "Düzenle: Kategori" : "Yeni Kategori"}
             </p>
           </div>

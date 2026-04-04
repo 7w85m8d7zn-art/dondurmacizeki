@@ -310,9 +310,12 @@ export function MenuManagementClient({
       const response = await fetch(`/api/admin/menus/${menuId}`, {
         method: "DELETE",
       })
+      const payload = (await response.json()) as
+        | ApiSuccessResponse<{ id: string }>
+        | ApiErrorResponse
 
-      if (!response.ok) {
-        throw new Error("Menü silinemedi.")
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message ?? "Menü silinemedi.")
       }
 
       if (selectedMenuId === menuId) {
@@ -774,10 +777,10 @@ export function MenuManagementClient({
                     </span>
                   </div>
                   <div className="relative mt-8 space-y-4">
-                    <h3 className="max-w-[12ch] text-[2rem] font-black uppercase leading-none tracking-tight text-white [text-shadow:0_4px_18px_rgba(0,0,0,0.45)] sm:text-[2.35rem]">
+                    <h3 className="max-w-[12ch] text-[1.6rem] font-black uppercase leading-none tracking-tight text-white [text-shadow:0_4px_18px_rgba(0,0,0,0.45)] sm:text-[2.35rem]">
                       {heroTitle}
                     </h3>
-                    <p className="text-lg font-black uppercase tracking-tight text-white [text-shadow:0_4px_18px_rgba(0,0,0,0.45)]">
+                    <p className="text-base font-black uppercase tracking-tight text-white [text-shadow:0_4px_18px_rgba(0,0,0,0.45)] sm:text-lg">
                       {heroSubtitle}
                     </p>
                   </div>

@@ -85,8 +85,8 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
 
   return (
     <section className="space-y-5">
-      <div className="overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(135deg,rgba(255,253,249,0.96),rgba(255,248,238,0.92))] shadow-[0_22px_60px_rgba(120,53,15,0.08)] backdrop-blur">
-        <div className="border-b border-amber-100/80 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.16),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.68),rgba(255,255,255,0.34))] px-5 py-5 sm:px-6">
+      <div className="overflow-hidden rounded-[1.6rem] border border-white/70 bg-[linear-gradient(135deg,rgba(255,253,249,0.96),rgba(255,248,238,0.92))] shadow-[0_22px_60px_rgba(120,53,15,0.08)] backdrop-blur sm:rounded-[2rem]">
+        <div className="border-b border-amber-100/80 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.16),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.68),rgba(255,255,255,0.34))] px-4 py-4 sm:px-6 sm:py-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="space-y-2">
               <div className="h-1 w-16 rounded-full bg-[linear-gradient(90deg,#f97316,#facc15)]" />
@@ -108,9 +108,9 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
           </div>
         </div>
 
-        <div className="px-4 py-4 sm:px-5 sm:py-5">
+        <div className="px-3 py-3 sm:px-5 sm:py-5">
           <div className="sticky top-2 z-20 -mx-1 overflow-x-auto px-1 py-1 sm:top-4">
-            <div className="inline-flex min-w-full items-center gap-2 rounded-[1.8rem] border border-amber-100/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,250,244,0.92))] p-2.5 shadow-[0_18px_44px_rgba(120,53,15,0.08)] backdrop-blur-xl">
+            <div className="inline-flex min-w-full items-center gap-2 rounded-[1.5rem] border border-amber-100/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,250,244,0.92))] p-2 shadow-[0_18px_44px_rgba(120,53,15,0.08)] backdrop-blur-xl sm:rounded-[1.8rem] sm:p-2.5">
               <MenuFilterButton
                 isActive={activeFilter === "all"}
                 onClick={() => startFilterTransition(() => setActiveFilter("all"))}
@@ -135,7 +135,7 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
 
       <div
         className={cn(
-          "rounded-[2rem] border border-white/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(255,250,245,0.78))] p-3 shadow-[0_18px_52px_rgba(120,53,15,0.07)] backdrop-blur transition-all duration-300 sm:p-4",
+          "rounded-[1.6rem] border border-white/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(255,250,245,0.78))] p-3 shadow-[0_18px_52px_rgba(120,53,15,0.07)] backdrop-blur transition-all duration-300 sm:rounded-[2rem] sm:p-4",
           isPending ? "translate-y-1 opacity-75" : "translate-y-0 opacity-100",
         )}
       >
@@ -143,9 +143,9 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
           {filteredItems.map((item) => (
             <article
               key={item.id}
-              className="group overflow-hidden rounded-[1.45rem] border border-stone-200/70 bg-[linear-gradient(135deg,rgba(250,250,249,0.96),rgba(255,255,255,0.98))] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-200 hover:bg-white hover:shadow-[0_16px_34px_rgba(120,53,15,0.08)] sm:rounded-[1.6rem] sm:p-3.5"
+              className="group overflow-hidden rounded-[1.35rem] border border-stone-200/70 bg-[linear-gradient(135deg,rgba(250,250,249,0.96),rgba(255,255,255,0.98))] p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-200 hover:bg-white hover:shadow-[0_16px_34px_rgba(120,53,15,0.08)] sm:rounded-[1.6rem] sm:p-3.5"
             >
-              <div className="relative h-[176px] w-full overflow-hidden rounded-[1.15rem] bg-stone-100 sm:hidden">
+              <div className="relative h-[140px] w-full overflow-hidden rounded-[1.1rem] bg-stone-100 sm:hidden">
                 <AppImage
                   src={item.imageUrl}
                   alt={item.name}
@@ -186,9 +186,14 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
                     ))}
                   </div>
 
-                  <p className="mt-2.5 truncate text-base font-black tracking-tight text-stone-950 sm:text-[1.35rem]">
-                    {item.name}
-                  </p>
+                  <div className="mt-2.5 flex items-start justify-between gap-3">
+                    <p className="min-w-0 flex-1 truncate text-base font-black tracking-tight text-stone-950 sm:text-[1.35rem]">
+                      {item.name}
+                    </p>
+                    <span className="hidden inline-flex shrink-0 items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-base font-black tracking-tight text-stone-950 sm:hidden">
+                      {formatPrice(item.price)}
+                    </span>
+                  </div>
                   <p className="mt-1.5 line-clamp-2 max-w-2xl text-sm leading-6 text-stone-600">
                     {item.description}
                   </p>
@@ -201,10 +206,21 @@ export function MenuCatalog({ menus }: MenuCatalogProps) {
                       Taze sunum
                     </span>
                   </div>
+
+                  <div className="mt-3 flex justify-end sm:hidden">
+                    <div className="inline-flex min-w-[150px] items-center justify-between gap-3 rounded-[1rem] border border-amber-100 bg-[linear-gradient(180deg,#fffdfa,#fff6ea)] px-4 py-2.5 shadow-[0_8px_18px_rgba(120,53,15,0.05)]">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+                        Fiyat
+                      </p>
+                      <span className="block text-[1.5rem] font-black leading-none tracking-tight text-stone-950 sm:text-[2rem]">
+                        {formatPrice(item.price)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 rounded-[1rem] border border-amber-100 bg-[linear-gradient(180deg,#fffdfa,#fff6ea)] px-3.5 py-2.5 shadow-[0_10px_24px_rgba(120,53,15,0.06)] sm:min-w-[116px] sm:flex-col sm:items-end sm:justify-center sm:self-stretch sm:rounded-[1.2rem] sm:px-5 sm:py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-stone-400">
+                <div className="hidden min-w-[116px] flex-col items-end justify-center self-stretch rounded-[1.2rem] border border-amber-100 bg-[linear-gradient(180deg,#fffdfa,#fff6ea)] px-5 py-3 shadow-[0_10px_24px_rgba(120,53,15,0.06)] sm:flex">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400 sm:tracking-[0.28em]">
                     Fiyat
                   </p>
                   <span className="block text-lg font-black tracking-tight text-stone-950 sm:text-[2rem]">
@@ -242,7 +258,7 @@ function MenuFilterButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "min-w-max rounded-full border px-4 py-2.5 text-sm font-semibold transition",
+        "min-w-max rounded-full border px-3 py-2 text-xs font-semibold transition sm:px-4 sm:py-2.5 sm:text-sm",
         isActive
           ? "border-stone-950 bg-[linear-gradient(180deg,#1c1917,#0f0d0c)] text-white shadow-[0_12px_24px_rgba(28,25,23,0.18)]"
           : "border-transparent bg-transparent text-stone-700 hover:border-amber-100 hover:bg-white hover:text-stone-950",

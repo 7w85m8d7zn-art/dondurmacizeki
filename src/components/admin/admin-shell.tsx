@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { SafeLink } from "@/components/ui/safe-link"
 
 import { LogoutButton } from "@/components/auth/logout-button"
 import { adminNavigation } from "@/data/admin-content"
@@ -40,7 +40,7 @@ export function AdminShell({
                 (item.href !== "/admin" && pathname.startsWith(item.href))
 
               return (
-                <Link
+                <SafeLink
                   key={item.href}
                   href={item.href}
                   className={cn(
@@ -65,7 +65,7 @@ export function AdminShell({
                       </span>
                     ) : null}
                   </div>
-                </Link>
+                </SafeLink>
               )
             })}
           </nav>
@@ -82,10 +82,10 @@ export function AdminShell({
                   <span className="text-sm text-stone-500">Dondurmacı Zeki</span>
                 </div>
                 <div>
-                  <h2 className="text-xl font-black uppercase tracking-tight text-stone-950 sm:text-2xl">
+                  <h2 className="text-lg font-black uppercase tracking-tight text-stone-950 sm:text-2xl">
                     {title}
                   </h2>
-                  <p className="mt-1 text-sm leading-6 text-stone-500">
+                  <p className="mt-1 text-xs leading-6 text-stone-500 sm:text-sm">
                     {description}
                   </p>
                 </div>
@@ -105,18 +105,18 @@ export function AdminShell({
                   (item.href !== "/admin" && pathname.startsWith(item.href))
 
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "min-w-max rounded-full border px-4 py-2 text-sm font-medium transition",
-                      isActive
-                        ? "border-[#ef1c24] bg-[#ef1c24] text-white"
-                        : "border-stone-200 bg-white text-stone-600",
-                    )}
-                  >
-                    {item.label}
-                  </Link>
+                <SafeLink
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "min-w-max rounded-full border px-3 py-1.5 text-xs font-medium transition sm:px-4 sm:py-2 sm:text-sm",
+                    isActive
+                      ? "border-[#ef1c24] bg-[#ef1c24] text-white"
+                      : "border-stone-200 bg-white text-stone-600",
+                  )}
+                >
+                  {item.label}
+                </SafeLink>
                 )
               })}
               <LogoutButton className="border-stone-200 bg-white text-stone-700 hover:bg-stone-50" />

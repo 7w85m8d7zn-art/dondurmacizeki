@@ -22,11 +22,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       : "/admin"
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0f1012] px-4 py-10">
+    <main className="relative flex min-h-screen items-start justify-center overflow-hidden bg-[#0f1012] px-4 py-6 sm:items-center sm:py-10">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,0.12),transparent_26%),radial-gradient(circle_at_top_right,rgba(220,38,38,0.14),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(234,179,8,0.1),transparent_24%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))]" />
       <div className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:24px_24px]" />
 
-      <section className="relative w-full max-w-[920px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-[linear-gradient(145deg,rgba(22,23,26,0.94),rgba(14,15,18,0.98))] shadow-[0_40px_120px_rgba(0,0,0,0.46)]">
+      <section className="relative w-full max-w-[560px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(145deg,rgba(22,23,26,0.94),rgba(14,15,18,0.98))] shadow-[0_40px_120px_rgba(0,0,0,0.46)] sm:max-w-[920px] sm:rounded-[2.5rem]">
         <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
           <div className="relative hidden min-h-[680px] overflow-hidden border-r border-white/8 lg:block">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(249,115,22,0.18),transparent_30%),radial-gradient(circle_at_75%_25%,rgba(239,68,68,0.14),transparent_32%),linear-gradient(180deg,#17181b,#101114)]" />
@@ -80,7 +80,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             </div>
           </div>
 
-          <div className="relative px-6 py-8 sm:px-10 sm:py-10 lg:px-12 lg:py-12">
+          <div className="relative px-5 py-7 sm:px-10 sm:py-10 lg:px-12 lg:py-12">
             <div className="mx-auto max-w-md">
               <div className="mb-8 flex items-center justify-center lg:hidden">
                 <div className="flex size-20 items-center justify-center rounded-[1.75rem] bg-[linear-gradient(145deg,#f97316,#ef4444)] text-2xl font-black text-white shadow-[0_12px_30px_rgba(239,68,68,0.28)]">

@@ -49,20 +49,20 @@ export function LoginForm({ redirectTo = "/admin" }: LoginFormProps) {
   }
 
   return (
-    <form className="grid gap-5" onSubmit={handleSubmit}>
+    <form className="grid gap-4 sm:gap-5" onSubmit={handleSubmit}>
       <label className="grid gap-2.5 text-left">
         <span className="pl-1 text-[0.74rem] font-semibold uppercase tracking-[0.28em] text-[#7f96bf]">
           Admin E-Posta
         </span>
-        <div className="group flex items-center gap-3 rounded-[1.45rem] border border-white/10 bg-[#edf3ff] px-4 py-4 text-stone-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition focus-within:border-amber-300/50 focus-within:shadow-[0_0_0_4px_rgba(245,158,11,0.08)]">
-          <div className="flex size-10 items-center justify-center rounded-[1rem] bg-white/65 text-[#5f6d84]">
+        <div className="group flex items-center gap-3 rounded-[1.45rem] border border-white/10 bg-[#edf3ff] px-4 py-3 text-stone-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition focus-within:border-amber-300/50 focus-within:shadow-[0_0_0_4px_rgba(245,158,11,0.08)] sm:py-4">
+          <div className="flex size-9 items-center justify-center rounded-[1rem] bg-white/65 text-[#5f6d84] sm:size-10">
             <Mail className="size-4.5" />
           </div>
           <input
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="w-full bg-transparent text-base font-semibold outline-none placeholder:text-stone-500/75"
+            className="w-full bg-transparent text-[0.95rem] font-semibold outline-none placeholder:text-stone-500/75 sm:text-base"
             placeholder="admin@dondurmacizeki.com"
             autoComplete="email"
           />
@@ -73,15 +73,15 @@ export function LoginForm({ redirectTo = "/admin" }: LoginFormProps) {
         <span className="pl-1 text-[0.74rem] font-semibold uppercase tracking-[0.28em] text-[#7f96bf]">
           Şifre
         </span>
-        <div className="group flex items-center gap-3 rounded-[1.45rem] border border-white/10 bg-[#edf3ff] px-4 py-4 text-stone-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition focus-within:border-amber-300/50 focus-within:shadow-[0_0_0_4px_rgba(245,158,11,0.08)]">
-          <div className="flex size-10 items-center justify-center rounded-[1rem] bg-white/65 text-[#5f6d84]">
+        <div className="group flex items-center gap-3 rounded-[1.45rem] border border-white/10 bg-[#edf3ff] px-4 py-3 text-stone-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition focus-within:border-amber-300/50 focus-within:shadow-[0_0_0_4px_rgba(245,158,11,0.08)] sm:py-4">
+          <div className="flex size-9 items-center justify-center rounded-[1rem] bg-white/65 text-[#5f6d84] sm:size-10">
             <LockKeyhole className="size-4.5" />
           </div>
           <input
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="w-full bg-transparent text-base font-semibold outline-none placeholder:text-stone-500/75"
+            className="w-full bg-transparent text-[0.95rem] font-semibold outline-none placeholder:text-stone-500/75 sm:text-base"
             placeholder="Şifrenizi girin"
             autoComplete="current-password"
           />
@@ -103,7 +103,7 @@ export function LoginForm({ redirectTo = "/admin" }: LoginFormProps) {
       <Button
         type="submit"
         size="lg"
-        className="mt-3 h-14 rounded-[1.45rem] border-0 bg-[linear-gradient(135deg,#f97316,#ef4444)] text-base font-black tracking-[0.01em] text-white shadow-[0_18px_38px_rgba(239,68,68,0.3)] hover:brightness-105"
+        className="mt-2 h-12 rounded-[1.45rem] border-0 bg-[linear-gradient(135deg,#f97316,#ef4444)] text-[0.95rem] font-black tracking-[0.01em] text-white shadow-[0_18px_38px_rgba(239,68,68,0.3)] hover:brightness-105 sm:mt-3 sm:h-14 sm:text-base"
         disabled={isPending}
       >
         {isPending ? "Giriş doğrulanıyor..." : "Panele devam et"}
